@@ -1,1 +1,1 @@
-# Comp-Gr-fica
+# Comp-Grafica
