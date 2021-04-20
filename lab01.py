@@ -51,6 +51,99 @@ grass3d = triangle([[0, 0, 0.6], [0, 0, 0], [0, 0.6, 0.3]])
 bush = sphere(2.8,20,7)
 bush2 = sphere(1.8,20,6)
 
+#-----granero-----------
+
+x0 = [(0.0, 0.0, 0.4), (2.0, 0.0, 0.4), (2.0, 1.0, 0.4), (0.0, 1.0, 0.4),
+	 (0.0, 0.0, 2.6), (2.0, 0.0, 2.6), (2.0, 1.0, 2.6), (0.0, 1.0, 2.6)]
+
+x1 = [(0.0, 1.0, 1.5), (2.0, 1.0, 1.5), (2.0, 1.0, 0.0), (0.0, 1.0, 0.0),
+     (0.0, 1.0, 3.0), (2.0, 1.0, 3.0), (2.0, 2.0, 1.5), (0.0, 2.0, 1.5)]
+
+x2 = [(0.7, 1.0, 3.0), (1.0, 1.0, 3.0), (1.3, 1.0, 3.0), (1.0, 1.5, 3.0),
+     (0.7, 1.0, 0.0), (1.0, 1.0, 0.0), (1.3, 1.0, 0.0), (1.0, 1.5, 0.0)]
+
+x3 = [(0.2, 0.0, 0.0), (0.4, 0.0, 0.0), (0.4, 1.0, 0.0), (0.2, 1.0, 0.0),
+     (0.2, 0.0, 0.2), (0.4, 0.0, 0.2), (0.4, 1.0, 0.2), (0.2, 1.0, 0.2)]
+
+x4 = [(1.6, 0.0, 0.0), (1.8, 0.0, 0.0), (1.8, 1.0, 0.0), (1.6, 1.0, 0.0),
+     (1.6, 0.0, 0.2), (1.8, 0.0, 0.2), (1.8, 1.0, 0.2), (1.6, 1.0, 0.2)]
+
+x5 = [(0.2, 0.0, 2.8), (0.4, 0.0, 2.8), (0.4, 1.0, 2.8), (0.2, 1.0, 2.8),
+     (0.2, 0.0, 3.0), (0.4, 0.0, 3.0), (0.4, 1.0, 3.0), (0.2, 1.0, 3.0)]
+
+x6 = [(1.6, 0.0, 2.8), (1.8, 0.0, 2.8), (1.8, 1.0, 2.8), (1.6, 1.0, 2.8),
+     (1.6, 0.0, 3.0), (1.8, 0.0, 3.0), (1.8, 1.0, 3.0), (1.6, 1.0, 3.0)]
+
+tamanio=9
+
+x0=size(tamanio,x0)
+x1=size(tamanio,x1)
+x2=size(tamanio,x2)
+x3=size(tamanio,x3)
+x4=size(tamanio,x4)
+x5=size(tamanio,x5)
+x6=size(tamanio,x6)
+
+cube1 = createCube(x0,pts)
+cube2 = createCube(x1,pts)
+cube3 = createCube(x2,pts)
+cube4 = createCube(x3,pts)
+cube5 = createCube(x4,pts)
+cube6 = createCube(x5,pts)
+cube7 = createCube(x6,pts)
+
+puerta = cube(10, 5, 5)
+
+#--------CERCAS---------
+
+c1 = [(5.0, 0.0, 0.0), (5.1, 0.0, 0.0), (5.1, 0.5, 0.0), (5.0, 0.5, 0.0),
+     (5.0, 0.0, 0.1), (5.1, 0.0, 0.1), (5.1, 0.5, 0.1), (5.0, 0.5, 0.1)]
+
+c2 = [(5.0, 0.0, 1.0), (5.1, 0.0, 1.0), (5.1, 0.5, 1.0), (5.0, 0.5, 1.0),
+     (5.0, 0.0, 1.1), (5.1, 0.0, 1.1), (5.1, 0.5, 1.1), (5.0, 0.5, 1.1)]
+
+c3 = [(5.0, 0.15, 0.0), (5.1, 0.15, 0.0), (5.1, 0.25, 0.0), (5.0, 0.25, 0.0),
+     (5.0, 0.15, 1.0), (5.1, 0.15, 1.0), (5.1, 0.25, 1.0), (5.0, 0.25, 1.0)]
+
+c4 = [(5.0, 0.35, 0.0), (5.1, 0.35, 0.0), (5.1, 0.45, 0.0), (5.0, 0.45, 0.0),
+     (5.0, 0.35, 1.0), (5.1, 0.35, 1.0), (5.1, 0.45, 1.0), (5.0, 0.45, 1.0)]
+
+
+tamcerca=8
+c1=size(tamcerca,c1)
+c2=size(tamcerca,c2)
+c3=size(tamcerca,c3)
+c4=size(tamcerca,c4)
+
+cube8 = createCube(c1,pts)
+cube9 = createCube(c2,pts)
+cube10 = createCube(c3,pts)
+cube11 = createCube(c4,pts)
+
+
+
+cubos = [cube8,cube9,cube10,cube11]
+
+
+vallas=crearVallas(cubos,[255, 225, 53],[0,90,None],[36,0,78],9,8,0)
+vallas1=crearVallas(cubos,[255, 225, 53],[0,180,None],[4,0,45],10,0,7.5)
+vallas2=crearVallas(cubos,[255, 225, 53],[0,180,None],[77,0,45],10,0,7.5)
+vallas3=crearVallas(cubos,[255, 225, 53],[0,90,None],[36,0,2],9,8,0)
+
+vallas4=crearVallas(cubos,[255, 225, 53],[0,90,None],[-5,0,30],3,7,0)
+vallas5=crearVallas(cubos,[255, 225, 53],[0,90,None],[-5,0,50],3,7,0)
+
+vallas6=crearVallas(cubos,[255, 225, 53],[0,180,None],[15,0,15],3,0,5.5)
+vallas7=crearVallas(cubos,[255, 225, 53],[0,180,None],[37,0,15],3,0,5.5)
+
+vallas8=crearVallas(cubos,[255, 225, 53],[0,90,None],[25,0,30],3,7,0)
+vallas9=crearVallas(cubos,[255, 225, 53],[0,90,None],[25,0,50],3,7,0)
+
+vallas10=crearVallas(cubos,[255, 225, 53],[0,180,None],[45,0,15],3,0,5.5)
+vallas11=crearVallas(cubos,[255, 225, 53],[0,180,None],[67,0,15],3,0,5.5)
+
+
+
 
 #--------------ACTORS(mapper/[position]/[angle]/[color]/texture_name)------------------------>
 act_techo  = actor(techo, [20,14,20], [None,None,90], [219, 172, 121], None)
@@ -111,11 +204,12 @@ act_melena_hourse   = actor(melena_hourse, [pos_x2+ 2, 3.5, 1.6], [20,None,None]
 
 act_grass = actor(grass, [0,0,0], [None,None,None], None, "grass.jpg")
 
-act_house = actor(house, [-30,5,-30], [None,None,None], [232,210,100], None)
-act_door = actor(door, [-30,3.5,-25], [None,None,None], [80,15,15], None)
-act_window = actor(window, [-35,5,-30], [None,None,None], [175,175,175], None)
-act_pommel = actor(pommel, [-31.5,3.5,-24.5], [None,None,None], [6,39,132], None)
-act_roof = actor(roof, [-30,14,-30], [None,None,90], [80,15,15], None)
+
+act_house = actor(house, [-26,5,-30], [None,None,None], [232,210,100], None)
+act_door = actor(door, [-26,3.5,-25], [None,None,None], [80,15,15], None)
+act_window = actor(window, [-31,5,-30], [None,None,None], [175,175,175], None)
+act_pommel = actor(pommel, [-27.5,3.5,-24.5], [None,None,None], [6,39,132], None)
+act_roof = actor(roof, [-26,14,-30], [None,None,90], [80,15,15], None)
 
 # arboles
 act_trunk1 = actor(trunk1, [30,4,-25], [None,None,None], [71,33,33], "corteza.jpg")
@@ -132,6 +226,20 @@ act_treecone42 = actor(tree_cone42, [22,11,-23], [None,None,90], [0,100,3], None
 #arbusto
 act_bush = actor(bush, [25,2.0,-15], [None,None,None], [0,100,3], "leaves.jpg")
 act_bush2 = actor(bush2, [28,2.0,-13], [None,None,None], [0,100,3], "leaves.jpg")
+
+
+#GRANERO
+
+cubeActor1 = createActor(cube1,[131, 68, 0],[0,90,None],[-15,0,-20])
+cubeActor2 = createActor(cube2,[219, 172, 121],[0,90,None],[-15,0,-20])
+cubeActor3 = createActor(cube3,[219, 172, 121],[0,90,None],[-15,0,-20])
+
+cubeActor4 = createActor(cube4,[131, 68, 0],[0,90,None],[-15,0,-20])
+cubeActor5 = createActor(cube5,[131, 68, 0],[0,90,None],[-15,0,-20])
+cubeActor6 = createActor(cube6,[131, 68, 0],[0,90,None],[-15,0,-20])
+cubeActor7 = createActor(cube7,[131, 68, 0],[0,90,None],[-15,0,-20])
+
+act_puerta = actor(puerta, [-1.5,2.5,-22], [None,None,None], [71,33,33], 'puerta_madera.jpg')
 
 #------------------------------Config--------------------------------------->
 #axes
@@ -249,6 +357,31 @@ for i in range(0, 20):
 
 renderer.AddActor(act_bush)
 renderer.AddActor(act_bush2)
+
+#----GRANERO-------
+
+renderer.AddActor(cubeActor1)
+renderer.AddActor(cubeActor2)
+renderer.AddActor(cubeActor3)
+renderer.AddActor(cubeActor4)
+renderer.AddActor(cubeActor5)
+renderer.AddActor(cubeActor6)
+renderer.AddActor(cubeActor7)
+renderer.AddActor(act_puerta)
+
+#----CERCA-------
+addActores(renderer,vallas)
+addActores(renderer,vallas1)
+addActores(renderer,vallas2)
+addActores(renderer,vallas3)
+addActores(renderer,vallas4)
+addActores(renderer,vallas5)
+addActores(renderer,vallas6)
+addActores(renderer,vallas7)
+addActores(renderer,vallas8)
+addActores(renderer,vallas9)
+addActores(renderer,vallas10)
+addActores(renderer,vallas11)
 
 
 renderer.AddActor(axes)

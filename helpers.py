@@ -1,5 +1,8 @@
 import vtk
 
+colors = vtk.vtkNamedColors()
+
+
 def transformRGBRange(rgb):
     return rgb[0]/255 , rgb[1]/255 , rgb[2]/255
 
@@ -92,3 +95,72 @@ def actor(mapper,xyz,angle,rgb,texture_name):
     actor.SetMapper(mapper)
     actor.SetPosition(xyz)
     return actor
+
+
+def createCube(x,pts):
+    cube = vtk.vtkPolyData()
+    points = vtk.vtkPoints()
+    polys = vtk.vtkCellArray()
+    for i, xi in enumerate(x):
+        points.InsertPoint(i, xi)
+    for pt in pts:
+        polys.InsertNextCell(mkVtkIdList(pt))
+    cube.SetPoints(points)
+    cube.SetPolys(polys)
+    return cube
+
+def createActor(cube,rgb,angle,xyz):
+    cubeMapper = vtk.vtkPolyDataMapper()
+    cubeMapper.SetInputData(cube)
+    cubeMapper.SetScalarRange(cube.GetScalarRange())
+    cubeActor = vtk.vtkActor()
+    cubeActor.SetMapper(cubeMapper)
+    cubeActor.GetProperty().SetColor(transformRGBRange(rgb))
+    if angle[0] is not None:
+        cubeActor.RotateX(angle[0])
+    if angle[1] is not None:
+        cubeActor.RotateY(angle[1])
+    if angle[2] is not None:
+        cubeActor.RotateZ(angle[2])
+    cubeActor.SetPosition(xyz)
+    return cubeActor
+
+def mkVtkIdList(it):
+    vil = vtk.vtkIdList()
+    for i in it:
+        vil.InsertNextId(int(i))
+    return vil
+
+def size(tam,x):
+    aux=[]
+    for i in range(len(x)):
+        current = x[i]
+        a = current[0]*tam
+        b = current[1]*tam
+        c = current[2]*tam
+        aux.append((a,b,c))
+    return aux
+
+def addActores(renderer,Actores):
+    for i in Actores:
+        renderer.AddActor(i)
+
+def crearVallas(cubos,color,angle,xyz,cantidad,tamx,tamz):
+    vallas = []
+    tam1 = tamx
+    tam2 = tamz
+
+    for i in range(cantidad):
+        cActor1 = createActor(cubos[0],color,angle,[xyz[0]-tamx,xyz[1],xyz[2]-tamz])
+        cActor2 = createActor(cubos[1],color,angle,[xyz[0]-tamx,xyz[1],xyz[2]-tamz])
+        cActor3 = createActor(cubos[2],color,angle,[xyz[0]-tamx,xyz[1],xyz[2]-tamz])
+        cActor4 = createActor(cubos[3],color,angle,[xyz[0]-tamx,xyz[1],xyz[2]-tamz])
+        tamx = tamx+tam1
+        tamz = tamz+tam2
+        vallas.append(cActor1)
+        vallas.append(cActor2)
+        vallas.append(cActor3)
+        vallas.append(cActor4)
+    return vallas
+
+pts = [(0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4),(1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)]
