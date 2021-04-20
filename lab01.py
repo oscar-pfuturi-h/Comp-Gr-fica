@@ -29,6 +29,12 @@ melena_hourse   = cube(.2, 1.9 , .5)
 
 grass = cube(80,.1,80)
 
+house = cube(10,10,10)
+door = cube(4,7,0.8)
+window = cube(0.4,3,6)
+pommel = sphere(0.3,10,10)
+roof = cone(8,8,30)
+
 trunk1 = cylinder(1.8, 8, 30)
 tree_cone11 = cone(4.6, 8, 30)
 tree_cone21 = cone(4.2, 7, 30)
@@ -104,6 +110,12 @@ act_melena_hourse   = actor(melena_hourse, [pos_x2+ 2, 3.5, 1.6], [20,None,None]
 
 
 act_grass = actor(grass, [0,0,0], [None,None,None], None, "grass.jpg")
+
+act_house = actor(house, [-30,5,-30], [None,None,None], [232,210,100], None)
+act_door = actor(door, [-30,3.5,-25], [None,None,None], [80,15,15], None)
+act_window = actor(window, [-35,5,-30], [None,None,None], [175,175,175], None)
+act_pommel = actor(pommel, [-31.5,3.5,-24.5], [None,None,None], [6,39,132], None)
+act_roof = actor(roof, [-30,14,-30], [None,None,90], [80,15,15], None)
 
 # arboles
 act_trunk1 = actor(trunk1, [30,4,-25], [None,None,None], [71,33,33], "corteza.jpg")
@@ -210,6 +222,12 @@ renderer.AddActor(act_cola_hourse)
 renderer.AddActor(act_melena_hourse)
 
 renderer.AddActor(act_grass)
+
+renderer.AddActor(act_house)
+renderer.AddActor(act_door)
+renderer.AddActor(act_window)
+renderer.AddActor(act_pommel)
+renderer.AddActor(act_roof)
 
 # arboles
 renderer.AddActor(act_trunk1)
