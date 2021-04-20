@@ -17,6 +17,26 @@ cresta_duck     = cube(.2, .2, .2)
 pata1_duck      = cube(.15, .5, .15)
 pata2_duck      = cube(.3, .1, .3)
 
+
+# cerdo
+body_pig  =  cube(2, 2, 4.5)
+leg_pig   =  cube(.5, 1.2, .5)
+nose_pig  =  cube(.5,0.75,.75)
+eye_pig   =  cube(.35,.35,.35)
+casco_pig  = cube(.52, .3, .52)
+tail_pig   = cube(.2, .2 , 1.5)
+head_pig = cube(2, 2 , 2)
+nose_pig  = cube(1 , .75 ,1)
+
+#oveja
+body_sheep     = cube(1.5, 1.5, 4)
+legs_sheep     = cube(.5, 1.2, .5)
+cascos_sheep   = cube(.52, .3, .52)
+head_sheep     = cube(1.5, 1.5 , 1.5)
+eye_sheep      = cube(.2, .25, .05)
+oreja_sheep    = cube(.2 , .5 ,.2)
+nose_sheep  =    cube(.6 , .45 ,.6)
+
 body_hourse     = cube(1.5, 1.5, 4)
 legs_hourse     = cube(.5, 1.2, .5)
 cascos_hourse   = cube(.52, .3, .52)
@@ -202,6 +222,38 @@ act_cola_hourse   = actor(cola_hourse, [pos_x2+ 2, 2.3, -2.5], [-20,None,None], 
 act_melena_hourse   = actor(melena_hourse, [pos_x2+ 2, 3.5, 1.6], [20,None,None], [205, 217, 102], None)
 
 
+pos_x4 =  10
+act_body_pig     = actor(body_pig, [pos_x4+ 2,2,0], [None,None,None], [108, 44, 66],None)
+act_leg1_pig    = actor(leg_pig, [pos_x4+ 1.5,.65,1.5], [None,None,None], [108, 44, 66], None)
+act_leg2_pig    = actor(leg_pig, [pos_x4+ 2.5,.65,1.5], [None,None,None], [108, 44, 66], None)
+act_leg3_pig    = actor(leg_pig, [pos_x4+ 1.5,.65,-1.5], [None,None,None], [108, 44, 66], None)
+act_leg4_pig    = actor(leg_pig, [pos_x4+ 2.5,.65,-1.5], [None,None,None], [108, 44, 66], None)
+act_casco1_pig   = actor(casco_pig, [pos_x4+ 1.5, .2, 1.5], [None,None,None], [0, 0, 0], None)
+act_casco2_pig   = actor(casco_pig, [pos_x4+ 2.5, .2, 1.5], [None,None,None], [0, 0, 0], None)
+act_casco3_pig   = actor(casco_pig, [pos_x4+ 1.5, .2, -1.5], [None,None,None], [0, 0, 0], None)
+act_casco4_pig   = actor(casco_pig, [pos_x4+ 2.5, .2, -1.5], [None,None,None], [0, 0, 0], None)
+act_tail_pig   = actor(tail_pig, [pos_x4+ 2, 2.3, -2.5], [-20,None,None], [108, 44, 66], None)
+act_head_pig   = actor(head_pig, [pos_x4+ 2, 3.5, 2.5], [None,None,None], [108, 44, 66], None)
+act_eye1_pig    = actor(eye_pig, [pos_x4+ 1.5, 4.1, 3.4], [None,None,None], [1, 1, 1], None)
+act_eye2_pig    = actor(eye_pig, [pos_x4+ 2.5, 4.1, 3.4], [None,None,None], [1, 1, 1], None)
+act_nose_pig   = actor(nose_pig, [pos_x4+ 2, 3.3, 3.4], [None,None,None], [108, 44, 66], None)
+
+
+pos_x5  =  15
+act_body_sheep     = actor(body_sheep, [pos_x5+ 2,2,0], [None,None,None], [212, 202, 184],None)
+act_legs1_sheep    = actor(legs_sheep, [pos_x5+ 1.5,.65,1.5], [None,None,None], [212, 202, 184], None)
+act_legs2_sheep    = actor(legs_sheep, [pos_x5+ 2.5,.65,1.5], [None,None,None], [212, 202, 184], None)
+act_legs3_sheep    = actor(legs_sheep, [pos_x5+ 1.5,.65,-1.5], [None,None,None], [212, 202, 184], None)
+act_legs4_sheep    = actor(legs_sheep, [pos_x5+ 2.5,.65,-1.5], [None,None,None], [212, 202, 184], None)
+act_casco1_sheep   = actor(cascos_sheep, [pos_x5+ 1.5, .2, 1.5], [None,None,None], [0, 0, 0], None)
+act_casco2_sheep   = actor(cascos_sheep, [pos_x5+ 2.5, .2, 1.5], [None,None,None], [0, 0, 0], None)
+act_casco3_sheep   = actor(cascos_sheep, [pos_x5+ 1.5, .2, -1.5], [None,None,None], [0, 0, 0], None)
+act_casco4_sheep   = actor(cascos_sheep, [pos_x5+ 2.5, .2, -1.5], [None,None,None], [0, 0, 0], None)
+act_head_sheep     = actor(head_sheep, [pos_x5+ 2, 3, 2], [None,None,None], [212, 202, 184], None)
+act_eye1_sheep     = actor(eye_sheep, [pos_x5+ 1.5, 3.5, 2.8], [None,None,None], [0, 0, 0], None)
+act_eye2_sheep     = actor(eye_sheep, [pos_x5+ 2.5, 3.5, 2.8], [None,None,None], [0, 0, 0], None)
+act_nose_sheep   = actor(nose_sheep, [pos_x5+ 2, 2.8, 2.6], [None,None,None], [108, 44, 66], None)
+
 act_grass = actor(grass, [0,0,0], [None,None,None], None, "grass.jpg")
 
 
@@ -243,10 +295,10 @@ act_puerta = actor(puerta, [-1.5,2.5,-22], [None,None,None], [71,33,33], 'puerta
 
 #------------------------------Config--------------------------------------->
 #axes
-transform = vtk.vtkTransform()
-transform.Translate(5.0, 0.0, 0.0) 
-axes = vtk.vtkAxesActor()
-axes.SetUserTransform(transform)
+# transform = vtk.vtkTransform()
+# transform.Translate(5.0, 0.0, 0.0) 
+# axes = vtk.vtkAxesActor()
+# axes.SetUserTransform(transform)
 
 #camera
 camera = vtk.vtkCamera()
@@ -309,6 +361,38 @@ renderer.AddActor(act_pata1_duck2)
 renderer.AddActor(act_pata2_duck2)
 renderer.AddActor(act_pata3_duck2)
 renderer.AddActor(act_pata4_duck2)
+
+#cerdo
+renderer.AddActor(act_head_pig)
+renderer.AddActor(act_body_pig)
+renderer.AddActor(act_leg1_pig)
+renderer.AddActor(act_leg2_pig)
+renderer.AddActor(act_leg3_pig)
+renderer.AddActor(act_leg4_pig)
+renderer.AddActor(act_casco1_pig)
+renderer.AddActor(act_casco2_pig)
+renderer.AddActor(act_casco3_pig)
+renderer.AddActor(act_casco4_pig)
+renderer.AddActor(act_tail_pig)
+renderer.AddActor(act_nose_pig)
+renderer.AddActor(act_eye1_pig)
+renderer.AddActor(act_eye2_pig)
+
+#oveja
+renderer.AddActor(act_body_sheep)
+renderer.AddActor(act_legs1_sheep)
+renderer.AddActor(act_legs2_sheep)
+renderer.AddActor(act_legs3_sheep)
+renderer.AddActor(act_legs4_sheep)
+renderer.AddActor(act_casco1_sheep)
+renderer.AddActor(act_casco2_sheep)
+renderer.AddActor(act_casco3_sheep)
+renderer.AddActor(act_casco4_sheep)
+renderer.AddActor(act_head_sheep)
+renderer.AddActor(act_eye1_sheep)
+renderer.AddActor(act_eye2_sheep)
+renderer.AddActor(act_nose_sheep)
+
 
 #caballo
 renderer.AddActor(act_body_hourse)
@@ -384,7 +468,7 @@ addActores(renderer,vallas10)
 addActores(renderer,vallas11)
 
 
-renderer.AddActor(axes)
+# renderer.AddActor(axes)
 renderer.SetActiveCamera(camera)
 renderer.AddLight(light1)
 renderer.AddLight(light2)
