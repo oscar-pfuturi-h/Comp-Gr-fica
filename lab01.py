@@ -40,6 +40,11 @@ tree_cone22 = cone(3.2, 5, 20)
 tree_cone32 = cone(2.8, 4, 20)
 tree_cone42 = cone(2.4, 3, 20)
 
+grass3d = triangle([[0, 0, 0.6], [0, 0, 0], [0, 0.6, 0.3]])
+
+bush = sphere(2.8,20,7)
+bush2 = sphere(1.8,20,6)
+
 
 #--------------ACTORS(mapper/[position]/[angle]/[color]/texture_name)------------------------>
 act_techo  = actor(techo, [20,14,20], [None,None,90], [219, 172, 121], None)
@@ -102,15 +107,19 @@ act_grass = actor(grass, [0,0,0], [None,None,None], None, "grass.jpg")
 
 # arboles
 act_trunk1 = actor(trunk1, [30,4,-25], [None,None,None], [71,33,33], "corteza.jpg")
-act_treecone11 = actor(tree_cone11, [30,8,-25], [None,None,90], [0,100,3], "leaves.jpg")
-act_treecone21 = actor(tree_cone21, [30,9,-25], [None,None,90], [0,100,3], "leaves.jpg")
-act_treecone31 = actor(tree_cone31, [30,10,-25], [None,None,90], [0,100,3], "leaves.jpg")
-act_treecone41 = actor(tree_cone41, [30,11,-25], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone11 = actor(tree_cone11, [30,8,-25], [None,None,90], [0,100,3], None)
+act_treecone21 = actor(tree_cone21, [30,9,-25], [None,None,90], [0,100,3], None)
+act_treecone31 = actor(tree_cone31, [30,10,-25], [None,None,90], [0,100,3], None)
+act_treecone41 = actor(tree_cone41, [30,11,-25], [None,None,90], [0,100,3], None)
 act_trunk2 = actor(trunk2, [22,3,-23], [None,None,None], [71,33,33], "corteza.jpg")
-act_treecone12 = actor(tree_cone12, [22,8,-23], [None,None,90], [0,100,3], "leaves.jpg")
-act_treecone22 = actor(tree_cone22, [22,9,-23], [None,None,90], [0,100,3], "leaves.jpg")
-act_treecone32 = actor(tree_cone32, [22,10,-23], [None,None,90], [0,100,3], "leaves.jpg")
-act_treecone42 = actor(tree_cone42, [22,11,-23], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone12 = actor(tree_cone12, [22,8,-23], [None,None,90], [0,100,3], None)
+act_treecone22 = actor(tree_cone22, [22,9,-23], [None,None,90], [0,100,3], None)
+act_treecone32 = actor(tree_cone32, [22,10,-23], [None,None,90], [0,100,3], None)
+act_treecone42 = actor(tree_cone42, [22,11,-23], [None,None,90], [0,100,3], None)
+
+#arbusto
+act_bush = actor(bush, [25,2.0,-15], [None,None,None], [0,100,3], "leaves.jpg")
+act_bush2 = actor(bush2, [28,2.0,-13], [None,None,None], [0,100,3], "leaves.jpg")
 
 #------------------------------Config--------------------------------------->
 #axes
@@ -202,6 +211,7 @@ renderer.AddActor(act_melena_hourse)
 
 renderer.AddActor(act_grass)
 
+# arboles
 renderer.AddActor(act_trunk1)
 renderer.AddActor(act_treecone11)
 renderer.AddActor(act_treecone21)
@@ -212,6 +222,15 @@ renderer.AddActor(act_treecone12)
 renderer.AddActor(act_treecone22)
 renderer.AddActor(act_treecone32)
 renderer.AddActor(act_treecone42)
+
+# pasto
+for i in range(0, 20):
+	for j in range(0, 40):
+		act_grass3d = actor(grass3d, [35-j,0,-30+i], [None,None,None], [0,153,5], None)
+		renderer.AddActor(act_grass3d)
+
+renderer.AddActor(act_bush)
+renderer.AddActor(act_bush2)
 
 
 renderer.AddActor(axes)

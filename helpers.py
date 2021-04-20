@@ -3,6 +3,28 @@ import vtk
 def transformRGBRange(rgb):
     return rgb[0]/255 , rgb[1]/255 , rgb[2]/255
 
+def triangle(vertices):
+    points = vtk.vtkPoints()
+    points.InsertNextPoint(vertices[0])
+    points.InsertNextPoint(vertices[1])
+    points.InsertNextPoint(vertices[2])
+
+    triangle = vtk.vtkTriangle()
+    triangle.GetPointIds().SetId(0, 0)
+    triangle.GetPointIds().SetId(1, 1)
+    triangle.GetPointIds().SetId(2, 2)
+
+    triangles = vtk.vtkCellArray()
+    triangles.InsertNextCell(triangle)
+    trianglePolyData = vtk.vtkPolyData()
+
+    trianglePolyData.SetPoints(points)
+    trianglePolyData.SetPolys(triangles)
+
+    mapp_object = vtk.vtkPolyDataMapper()
+    mapp_object.SetInputData(trianglePolyData)
+    return mapp_object
+
 def cube(size_x, size_y, size_z):
     cube_shape = vtk.vtkCubeSource()
     cube_shape.SetXLength(size_x)
@@ -23,12 +45,18 @@ def cone(radius,height,resolution):
     mapp_object.SetInputData(cone_shape.GetOutput())
     return mapp_object
 
-def sphere(radius):
+def sphere(radius,theta,phi):
     sphere_shape = vtk.vtkSphereSource()
     sphere_shape.SetRadius(radius)
-    sphere_shape.Update()
+    sphere_shape.SetThetaResolution(theta)
+    sphere_shape.SetPhiResolution(phi)
+
+    map_to_sphere = vtk.vtkTextureMapToSphere()
+    map_to_sphere.SetInputConnection(sphere_shape.GetOutputPort())
+    map_to_sphere.PreventSeamOn()
+
     mapp_object = vtk.vtkPolyDataMapper()
-    mapp_object.SetInputData(sphere_shape.GetOutput())
+    mapp_object.SetInputConnection(map_to_sphere.GetOutputPort())
     return mapp_object
 
 def cylinder(radius,height,resolution):
