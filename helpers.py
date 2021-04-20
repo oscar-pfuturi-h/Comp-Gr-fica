@@ -31,6 +31,16 @@ def sphere(radius):
     mapp_object.SetInputData(sphere_shape.GetOutput())
     return mapp_object
 
+def cylinder(radius,height,resolution):
+    cylinder_shape = vtk.vtkCylinderSource()
+    cylinder_shape.SetRadius(radius)
+    cylinder_shape.SetHeight(height)
+    cylinder_shape.SetResolution(resolution)
+    cylinder_shape.Update()
+    mapp_object = vtk.vtkPolyDataMapper()
+    mapp_object.SetInputData(cylinder_shape.GetOutput())
+    return mapp_object
+
 def actor(mapper,xyz,angle,rgb,texture_name):
     actor = vtk.vtkActor()
     if texture_name is not None:

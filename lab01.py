@@ -7,7 +7,7 @@ body = cone(6, 16, 80)
 aspa = cube(1.5,17,.1)
 estaca = cube(.5,.5,5.7)
 
-
+# pato
 body_duck       = cube(.7,.8,1.2)
 ala_duck        = cube(.15,.5, .7)
 cuello_duck     = cube(.5,.7, .5)
@@ -28,6 +28,17 @@ cola_hourse     = cube(.2, .2 , 1.5)
 melena_hourse   = cube(.2, 1.9 , .5)
 
 grass = cube(80,.1,80)
+
+trunk1 = cylinder(1.8, 8, 30)
+tree_cone11 = cone(4.6, 8, 30)
+tree_cone21 = cone(4.2, 7, 30)
+tree_cone31 = cone(3.8, 6, 30)
+tree_cone41 = cone(3.4, 5, 30)
+trunk2 = cylinder(1.2, 6, 30)
+tree_cone12 = cone(3.6, 6, 20)
+tree_cone22 = cone(3.2, 5, 20)
+tree_cone32 = cone(2.8, 4, 20)
+tree_cone42 = cone(2.4, 3, 20)
 
 
 #--------------ACTORS(mapper/[position]/[angle]/[color]/texture_name)------------------------>
@@ -89,6 +100,17 @@ act_melena_hourse   = actor(melena_hourse, [pos_x2+ 2, 3.5, 1.6], [20,None,None]
 
 act_grass = actor(grass, [0,0,0], [None,None,None], None, "grass.jpg")
 
+# arboles
+act_trunk1 = actor(trunk1, [30,4,-25], [None,None,None], [71,33,33], "corteza.jpg")
+act_treecone11 = actor(tree_cone11, [30,8,-25], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone21 = actor(tree_cone21, [30,9,-25], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone31 = actor(tree_cone31, [30,10,-25], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone41 = actor(tree_cone41, [30,11,-25], [None,None,90], [0,100,3], "leaves.jpg")
+act_trunk2 = actor(trunk2, [22,3,-23], [None,None,None], [71,33,33], "corteza.jpg")
+act_treecone12 = actor(tree_cone12, [22,8,-23], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone22 = actor(tree_cone22, [22,9,-23], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone32 = actor(tree_cone32, [22,10,-23], [None,None,90], [0,100,3], "leaves.jpg")
+act_treecone42 = actor(tree_cone42, [22,11,-23], [None,None,90], [0,100,3], "leaves.jpg")
 
 #------------------------------Config--------------------------------------->
 #axes
@@ -179,6 +201,18 @@ renderer.AddActor(act_cola_hourse)
 renderer.AddActor(act_melena_hourse)
 
 renderer.AddActor(act_grass)
+
+renderer.AddActor(act_trunk1)
+renderer.AddActor(act_treecone11)
+renderer.AddActor(act_treecone21)
+renderer.AddActor(act_treecone31)
+renderer.AddActor(act_treecone41)
+renderer.AddActor(act_trunk2)
+renderer.AddActor(act_treecone12)
+renderer.AddActor(act_treecone22)
+renderer.AddActor(act_treecone32)
+renderer.AddActor(act_treecone42)
+
 
 renderer.AddActor(axes)
 renderer.SetActiveCamera(camera)
