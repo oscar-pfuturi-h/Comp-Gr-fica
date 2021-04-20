@@ -42,10 +42,20 @@ legs_hourse     = cube(.5, 1.2, .5)
 cascos_hourse   = cube(.52, .3, .52)
 cuello_hourse   = cube(.85, 2, .85)
 head_hourse     = cube(1, .8 , 1.5)
-eye_hourse      = cube(.2, .25, .05)
-oreja_hourse    = cube(.2 , .5 ,.2)
+eye_hourse      = cube(.2, .20, .04)
+oreja_hourse    = cube(.2 , .4 ,.15)
 cola_hourse     = cube(.2, .2 , 1.5)
 melena_hourse   = cube(.2, 1.9 , .5)
+
+#perro
+body_dog     = cube(1.0, 1.0, 2.5)
+legs_dog     = cube(.3, 0.8, .3)
+patas_dog   = cube(.36, .24, .36)
+cuello_dog   = cube(.55, 1.0, .55)
+head_dog     = cube(0.6, .6 , 1.2)
+eye_dog      = cube(.2, .25, .05)
+oreja_dog    = cube(.1 , 0.7 ,0.45)
+cola_dog     = cube(.2, .2 , 1.5)
 
 grass = cube(80,.1,80)
 
@@ -254,6 +264,26 @@ act_eye1_sheep     = actor(eye_sheep, [pos_x5+ 1.5, 3.5, 2.8], [None,None,None],
 act_eye2_sheep     = actor(eye_sheep, [pos_x5+ 2.5, 3.5, 2.8], [None,None,None], [0, 0, 0], None)
 act_nose_sheep   = actor(nose_sheep, [pos_x5+ 2, 2.8, 2.6], [None,None,None], [108, 44, 66], None)
 
+#perro
+pos_x6 = -25
+pos_z = 20
+act_body_dog     = actor(body_dog, [pos_x6+ 2,1.5,pos_z+0.5], [None,None,None], [180, 140, 31],None)
+act_legs1_dog    = actor(legs_dog, [pos_x6+ 1.7,.65,pos_z+1.5], [None,None,None], [180, 140, 31], None)
+act_legs2_dog    = actor(legs_dog, [pos_x6+ 2.3,.65,pos_z+1.5], [None,None,None], [180, 140, 31], None)
+act_legs3_dog    = actor(legs_dog, [pos_x6+ 1.7,.65,pos_z+-0.6], [None,None,None], [180, 140, 31], None)
+act_legs4_dog    = actor(legs_dog, [pos_x6+ 2.3,.65,pos_z+-0.6], [None,None,None], [180, 140, 31], None)
+act_pata1_dog   = actor(patas_dog, [pos_x6+ 1.7, .2,pos_z+ 1.6], [None,None,None], [180, 140, 31], None)
+act_pata2_dog   = actor(patas_dog, [pos_x6+ 2.3, .2,pos_z+ 1.6], [None,None,None], [180, 140, 31], None)
+act_pata3_dog   = actor(patas_dog, [pos_x6+ 1.7, .2,pos_z+ -0.5], [None,None,None], [180, 140, 31], None)
+act_pata4_dog   = actor(patas_dog, [pos_x6+ 2.3, .2,pos_z+ -0.5], [None,None,None], [180, 140, 31], None)
+act_cuello_dog   = actor(cuello_dog, [pos_x6+ 2, 2.2,pos_z+ 1.6], [20,None,None], [180, 140, 31], None)
+act_head_dog     = actor(head_dog, [pos_x6+ 2, 2.7,pos_z+ 2.2], [20,None,None], [180, 140, 31], None)
+act_eye1_dog     = actor(eye_dog, [pos_x6+ 2.3, 2.7, pos_z+2.2], [20,90,None], [0, 0, 0], None)
+act_eye2_dog     = actor(eye_dog, [pos_x6+ 1.7, 2.7,pos_z+ 2.2], [20,90,None], [0, 0, 0], None)
+act_oreja1_dog   = actor(oreja_dog, [pos_x6+ 2.3, 2.5, pos_z+1.8], [None,None,None], [180, 140, 31], None)
+act_oreja2_dog   = actor(oreja_dog, [pos_x6+ 1.7, 2.5, pos_z+1.8], [None,None,None], [180, 140, 31], None)
+act_cola_dog   = actor(cola_dog, [pos_x6+ 2, 1.5,pos_z+ -1.2], [-20,None,None], [180, 140, 31], None)
+
 act_grass = actor(grass, [0,0,0], [None,None,None], None, "grass.jpg")
 
 
@@ -412,6 +442,25 @@ renderer.AddActor(act_oreja1_hourse)
 renderer.AddActor(act_oreja2_hourse)
 renderer.AddActor(act_cola_hourse)
 renderer.AddActor(act_melena_hourse)
+
+#perro
+renderer.AddActor(act_body_dog)
+renderer.AddActor(act_legs1_dog)
+renderer.AddActor(act_legs2_dog)
+renderer.AddActor(act_legs3_dog)
+renderer.AddActor(act_legs4_dog)
+renderer.AddActor(act_pata1_dog)
+renderer.AddActor(act_pata2_dog)
+renderer.AddActor(act_pata3_dog)
+renderer.AddActor(act_pata4_dog)
+renderer.AddActor(act_cuello_dog)
+renderer.AddActor(act_head_dog)
+renderer.AddActor(act_eye1_dog)
+renderer.AddActor(act_eye2_dog)
+renderer.AddActor(act_oreja1_dog)
+renderer.AddActor(act_oreja2_dog)
+renderer.AddActor(act_cola_dog)
+
 
 renderer.AddActor(act_grass)
 
