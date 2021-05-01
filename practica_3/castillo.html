@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>isla castillo</title>
+    <script type="text/javascript" src="libs/three.js"></script>
+    <script type="text/javascript" src="libs/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="libs/stats.js"></script>
+    <script type="text/javascript" src="libs/dat.gui.js"></script>
+    <script type="text/javascript" src="libs/TrackballControls.js"></script>
+    <style>
+        body{
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<div id="WebGL-output">
+</div>
+
+<script type="text/javascript">
+
+        function createRepeatingTexture(fileName, repeatX, repeatY) {
+            var texture = THREE.ImageUtils.loadTexture(fileName);
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set( repeatX, repeatY);
+            return texture;
+        }
+   
+        function CrearCastillo() {
+            var paredMaterial = new THREE.MeshLambertMaterial({color: 0xeeeeee});
+            var roofMaterial = new THREE.MeshLambertMaterial({color: 0xd50000});
+
+            function crearTorre(alturaT,alturaR,radio) {
+                var torre = new THREE.Mesh(new THREE.CylinderGeometry(radio, radio, alturaT, 30),  paredMaterial);
+                torre.castShadow = true;
+                torre.position.y = 5;
+
+                var roof = new THREE.Mesh(new THREE.CylinderGeometry(0, radio, alturaR, 30), roofMaterial);
+                roof.castShadow = true;
+                roof.position.y = alturaT - (alturaT/2-alturaR/2);
+                torre.add(roof);
+
+                return torre;
+            }
+
+            function createpared(paredWidth) {
+                var paredHeight = 38;
+                var paredDepth = 10;
+                var paredGeometry = new THREE.CubeGeometry(paredWidth, paredHeight, paredDepth);
+                var pared = new THREE.Mesh(paredGeometry, paredMaterial);
+                pared.castShadow = true;
+                pared.position.y = paredHeight / 2;
+                var battlementSize = 4;
+                var battlementGeometry = new THREE.CubeGeometry(battlementSize, battlementSize, battlementSize);
+
+                for (var x = 13 + -(paredWidth / 2) + battlementSize / 2; x < paredWidth / 2 - 10; x += battlementSize * 2) {
+                    var battlement = new THREE.Mesh(battlementGeometry, paredMaterial);
+                    battlement.castShadow = true;
+                    battlement.position.set(x, paredHeight / 2 + battlementSize / 2, paredDepth / 2 - battlementSize / 2);
+                    pared.add(battlement);
+                }
+
+                var torre = crearTorre(50,30,20);
+                torre.position.x = paredWidth / 2;
+                pared.add(torre);
+
+                var torre2 = crearTorre(110,30,35);
+                torre2.position.set(450,80,300);
+                scene.add(torre2);
+
+                var torre3 = crearTorre(110,30,35);
+                torre3.position.set(-450,80,300);
+                scene.add(torre3);
+
+                var torre4 = crearTorre(190,85,50);
+                torre4.position.set(0,80,-50);
+                scene.add(torre4);
+
+                var torre5 = crearTorre(140,60,25);
+                torre5.position.set(-70,70,-20);
+                scene.add(torre5);
+
+                var torre6 = crearTorre(140,60,25);
+                torre6.position.set(70,70,-20);
+                scene.add(torre6);
+
+                return pared;
+            }
+
+            function createGate() {
+                var gateBuildingWidth = 50;
+                var gateBuildingHeight = 50;
+                var gateBuildingDepth = 40;
+
+                var gateBuilding = new THREE.Mesh(new THREE.CubeGeometry(gateBuildingWidth, gateBuildingHeight, gateBuildingDepth), paredMaterial);
+                gateBuilding.castShadow = true;
+
+                gateBuilding.position.y = gateBuildingHeight / 2;
+
+                var ellipse = new THREE.EllipseCurve(0, 0, 20, 30, 0, Math.PI);
+                var ellipsePath = new THREE.Path(ellipse.getPoints(50));
+
+                var gateGeometry = new THREE.ShapeGeometry(ellipsePath.toShapes()[0]);
+                var gateMaterial = new THREE.MeshBasicMaterial({ color: 0x4e3100 });
+
+                var outerGate = new THREE.Mesh(gateGeometry, gateMaterial);
+                var innerGate = new THREE.Mesh(gateGeometry, gateMaterial);
+
+                outerGate.position.set(0, -gateBuildingHeight / 2, gateBuildingDepth / 2 + 0.2);
+                gateBuilding.add(outerGate);
+                innerGate.rotation.y = Math.PI; 
+                innerGate.position.set(0, -gateBuildingHeight / 2, -gateBuildingDepth / 2 - 0.2);
+                gateBuilding.add(innerGate);
+
+                // Crear piso
+                var roof = new THREE.Mesh(new THREE.CylinderGeometry(0, 35, 15, 4), roofMaterial);
+                roof.castShadow = true;
+                roof.rotation.y = 0.25*Math.PI;
+                roof.position.y = gateBuildingHeight / 2 + 8;
+                gateBuilding.add(roof);
+
+                return gateBuilding;
+            }
+
+            function createMainBuilding() {
+                var buildingWidth = 108;
+                var buildingHeight = 95;
+                var buildingDepth = 58;
+                var roofHeight = 36;
+
+                function createRoof() {
+                    var roofGeometry = new THREE.Geometry();
+
+                    roofGeometry.vertices.push(new THREE.Vector3(buildingWidth / 2, 0, -buildingDepth / 2));
+                    roofGeometry.vertices.push(new THREE.Vector3(0, roofHeight, -buildingDepth / 2));
+                    roofGeometry.vertices.push(new THREE.Vector3(buildingWidth / 2, 0, buildingDepth / 2));
+                    roofGeometry.vertices.push(new THREE.Vector3(0, roofHeight, buildingDepth / 2));
+
+                    roofGeometry.faces.push(new THREE.Face3(0, 1, 2));
+                    roofGeometry.faces.push(new THREE.Face3(3, 2, 1));
+                    roofGeometry.computeFaceNormals();
+
+                    var roof = new THREE.Mesh(roofGeometry, roofMaterial);
+                    roof.castShadow = true;
+
+                    return roof;
+                }
+
+                function createUpperPart() {
+                    var upperPartGeometry = new THREE.Geometry();
+
+                    upperPartGeometry.vertices.push(new THREE.Vector3(-buildingWidth / 2, 0, 0));
+                    upperPartGeometry.vertices.push(new THREE.Vector3(buildingWidth / 2, 0, 0));
+                    upperPartGeometry.vertices.push(new THREE.Vector3(0, roofHeight, 0));
+
+                    upperPartGeometry.faces.push(new THREE.Face3(0, 1, 2));
+                    upperPartGeometry.computeFaceNormals();
+
+                    var upperPart = new THREE.Mesh(upperPartGeometry, paredMaterial);
+                    upperPart.castShadow = true;
+
+                    return upperPart;
+                }
+
+                function createWindow(xRadius, yRadius, material) {
+                    var ellipse = new THREE.EllipseCurve(0, 0, xRadius, yRadius, 0, Math.PI);
+                    var ellipsePath = new THREE.Path(ellipse.getPoints(50));
+                    var windowGeometry = new THREE.ShapeGeometry(ellipsePath.toShapes()[0]);
+
+                    return new THREE.Mesh(windowGeometry, material);
+                }
+
+                var building = new THREE.Mesh(new THREE.CubeGeometry(buildingWidth, buildingHeight, buildingDepth), paredMaterial);
+                building.castShadow = true;
+                building.position.y = buildingHeight / 2;
+
+
+                var frontUpperBuildingPart = createUpperPart();
+                var backUpperBuildingPart = createUpperPart();
+
+                frontUpperBuildingPart.position.set(0, buildingHeight / 2, buildingDepth / 2);
+                building.add(frontUpperBuildingPart);
+                backUpperBuildingPart.rotation.y = Math.PI; 
+                backUpperBuildingPart.position.set(0, buildingHeight / 2, -buildingDepth / 2);
+                building.add(backUpperBuildingPart);
+
+
+                var rightRoof = createRoof();
+                var leftRoof = createRoof();
+
+                rightRoof.position.set(0, buildingHeight, 0);
+                rightRoof.position.y = buildingHeight / 2;
+
+                building.add(rightRoof);
+
+                leftRoof.rotation.y = Math.PI;
+                leftRoof.position.y = buildingHeight / 2;
+                building.add(leftRoof);
+
+                // crear puerta
+                var door = new THREE.Mesh(new THREE.PlaneGeometry(30, 36), new THREE.MeshLambertMaterial({color: 0x4e3100}));
+
+                door.position.z = buildingDepth / 2 + 0.2;
+                door.position.y = -30;
+                building.add(door);
+
+                // crear ventana
+                var windowMaterial = new THREE.MeshBasicMaterial({ color: 0x253D4C });
+                var windowXRadius = 6;
+                var windowYRadius = 15;
+                var windowMargin = 19;
+                var windowY = 9;
+
+                // frente
+                var x;
+                for (x = -buildingWidth / 2 + windowMargin; x < buildingWidth / 2 - windowMargin; x += windowMargin) {
+                    wind = createWindow(windowXRadius, windowYRadius, windowMaterial);
+                    wind.position.set(x, windowY, buildingDepth / 2 + 2);
+                    building.add(wind);
+                }
+
+                // izquierda
+                var z;
+                for (z = -buildingDepth / 2 + windowMargin; z < buildingDepth / 2 - windowMargin; z += windowMargin) {
+                    wind = createWindow(windowXRadius, windowYRadius, windowMaterial);
+                    wind.rotation.y = -0.5*Math.PI;
+                    wind.position.set(-buildingWidth / 2 - 0.2, windowY, z);
+                    building.add(wind);
+                }
+
+                // derecha
+                for (z = -buildingDepth / 2 + windowMargin; z < buildingDepth / 2 - windowMargin; z += windowMargin) {
+                    wind = createWindow(windowXRadius, windowYRadius, windowMaterial);
+                    wind.rotation.y = 0.5*Math.PI;
+                    wind.position.set(buildingWidth / 2 + 0.2, windowY, z);
+                    building.add(wind);
+                }
+
+                // ventana grande
+
+                wind = createWindow(18, 30, windowMaterial);
+                wind.position.set(0, 40, buildingDepth / 2 + 0.2);
+                building.add(wind);
+
+                return building;
+            }
+
+            var castillo = new THREE.Object3D();
+            var paredWidth = 270;
+            var leftpared = createpared(paredWidth);
+            var rightpared = createpared(paredWidth);
+            var frontpared = createpared(paredWidth);
+            var backpared = createpared(paredWidth);
+
+            // set pareds position
+            frontpared.position.z = paredWidth / 2;
+            castillo.add(frontpared);
+
+            leftpared.rotation.y = -0.5*Math.PI;
+            leftpared.position.x = -paredWidth / 2;
+            castillo.add(leftpared);
+
+            backpared.rotation.y = -1*Math.PI;
+            backpared.position.z = -paredWidth / 2;
+            castillo.add(backpared);
+
+            rightpared.rotation.y = 0.5*Math.PI;
+            rightpared.position.x = paredWidth / 2;
+            castillo.add(rightpared);
+
+            // añadir porton
+            var gate = createGate();
+            castillo.add(gate);
+            gate.position.z = frontpared.position.z;
+
+            // añadir castillo
+            var building = createMainBuilding();
+            building.position.z = 25;
+            castillo.add(building);
+
+            return castillo;
+        }
+
+        function createisla(radioU,radioD,altura) {
+            var isla = new THREE.Mesh(new THREE.CylinderGeometry(radioU, radioD, altura, 80),  new THREE.MeshLambertMaterial({color: 0x00ff00}));
+            isla.receiveShadow = true;
+            return isla;
+        }
+
+        function addLight(scene) {
+            var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+            hemiLight.position.set(0, 500, 0);
+
+            scene.add(hemiLight);
+
+            var dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            dirLight.castShadow = true;
+            dirLight.position.set(265, 150, -265);
+
+            dirLight.shadowMapWidth = 8192;
+            dirLight.shadowMapHeight = 8192;
+
+            var lightDist = 800;
+            dirLight.shadowCameraLeft = -lightDist;
+            dirLight.shadowCameraRight = lightDist;
+            dirLight.shadowCameraTop = lightDist;
+            dirLight.shadowCameraBottom = -lightDist;
+
+            dirLight.shadowCameraFar = 3500;
+            dirLight.shadowBias = 0.001;
+            dirLight.shadowDarkness = 0.35;
+
+            scene.add(dirLight);
+        }
+
+        var scene = new THREE.Scene();
+        var renderer = new THREE.WebGLRenderer({antialias: true});
+
+        renderer.setClearColor(0x9fd2f1, 1.0); //  color cielo
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        const geometry = new THREE.RingGeometry( 400, 240, 320 );
+        const material = new THREE.MeshBasicMaterial( { color: 0x1acffa, side: THREE.DoubleSide } );
+        const mesh = new THREE.Mesh( geometry, material );
+        mesh.receiveShadow  = true;
+        mesh.rotation.x = -0.5*Math.PI;
+        
+
+        var planeGeometry = new THREE.PlaneGeometry(1500, 1200);
+        var groundMaterial = new THREE.MeshLambertMaterial({
+                    map: createRepeatingTexture("texture/grass3.jpg", 5, 5)
+        });
+
+        var plane = new THREE.Mesh(planeGeometry, groundMaterial);
+
+        plane.receiveShadow  = true;
+        plane.rotation.x = -0.5*Math.PI;
+        plane.position.y= -5;
+        
+        scene.add(plane);
+        scene.add(mesh);
+
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.x = 0;
+        camera.position.y = 165;
+        camera.position.z = 235;
+        camera.lookAt(scene.position);
+
+        // añadir isla y castillo
+
+        var isla = createisla(200,250,10);
+        scene.add(isla);
+
+        var castillo = CrearCastillo();
+        castillo.position.y = 5;
+        isla.add(castillo);
+
+        var isla2 = createisla(80,120,15);
+        isla2.position.set(-450,25,300);
+        scene.add(isla2);
+
+        var isla3 = createisla(80,120,15);
+        isla3.position.set(450,25,300);
+
+        scene.add(isla3);
+        addLight(scene);
+        $("#WebGL-output").append(renderer.domElement);
+
+        // camara
+        var cameraControls = new THREE.TrackballControls(camera, renderer.domElement);
+        cameraControls.rotateSpeed = 1.0;
+        cameraControls.zoomSpeed = 1.0;
+        cameraControls.panSpeed = 1.0;
+        cameraControls.noZoom = false;
+        cameraControls.noPan = false;
+        cameraControls.staticMoving = true;
+        cameraControls.dynamicDampingFactor = 0.3;
+
+        render();
+
+        function render() {
+            cameraControls.update();
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        };
+</script>
+</body>
+</html>
