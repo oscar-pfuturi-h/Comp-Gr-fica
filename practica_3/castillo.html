@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>isla castillo</title>
     <script type="text/javascript" src="libs/three.js"></script>
@@ -8,40 +9,43 @@
     <script type="text/javascript" src="libs/dat.gui.js"></script>
     <script type="text/javascript" src="libs/TrackballControls.js"></script>
     <style>
-        body{
+        body {
             margin: 0;
             overflow: hidden;
         }
     </style>
 </head>
+
 <body>
 
-<div id="Stats-output">
-</div>
-<div id="WebGL-output">
-</div>
+    <div id="Stats-output">
+    </div>
+    <div id="WebGL-output">
+    </div>
 
-<script type="text/javascript">
+    <script type="text/javascript">
+
+        var scene;
 
         function createRepeatingTexture(fileName, repeatX, repeatY) {
             var texture = THREE.ImageUtils.loadTexture(fileName);
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set( repeatX, repeatY);
+            texture.repeat.set(repeatX, repeatY);
             return texture;
         }
-   
-        function CrearCastillo() {
-            var paredMaterial = new THREE.MeshLambertMaterial({color: 0xeeeeee});
-            var roofMaterial = new THREE.MeshLambertMaterial({color: 0xd50000});
 
-            function crearTorre(alturaT,alturaR,radio) {
-                var torre = new THREE.Mesh(new THREE.CylinderGeometry(radio, radio, alturaT, 30),  paredMaterial);
+        function CrearCastillo() {
+            var paredMaterial = new THREE.MeshLambertMaterial({ color: 0xeeeeee });
+            var roofMaterial = new THREE.MeshLambertMaterial({ color: 0xd50000 });
+
+            function crearTorre(alturaT, alturaR, radio) {
+                var torre = new THREE.Mesh(new THREE.CylinderGeometry(radio, radio, alturaT, 30), paredMaterial);
                 torre.castShadow = true;
                 torre.position.y = 5;
 
                 var roof = new THREE.Mesh(new THREE.CylinderGeometry(0, radio, alturaR, 30), roofMaterial);
                 roof.castShadow = true;
-                roof.position.y = alturaT - (alturaT/2-alturaR/2);
+                roof.position.y = alturaT - (alturaT / 2 - alturaR / 2);
                 torre.add(roof);
 
                 return torre;
@@ -64,28 +68,28 @@
                     pared.add(battlement);
                 }
 
-                var torre = crearTorre(50,30,20);
+                var torre = crearTorre(50, 30, 20);
                 torre.position.x = paredWidth / 2;
                 pared.add(torre);
 
-                var torre2 = crearTorre(110,30,35);
-                torre2.position.set(450,80,300);
+                var torre2 = crearTorre(110, 30, 35);
+                torre2.position.set(450, 80, 300);
                 scene.add(torre2);
 
-                var torre3 = crearTorre(110,30,35);
-                torre3.position.set(-450,80,300);
+                var torre3 = crearTorre(110, 30, 35);
+                torre3.position.set(-450, 80, 300);
                 scene.add(torre3);
 
-                var torre4 = crearTorre(190,85,50);
-                torre4.position.set(0,80,-50);
+                var torre4 = crearTorre(190, 85, 50);
+                torre4.position.set(0, 80, -50);
                 scene.add(torre4);
 
-                var torre5 = crearTorre(140,60,25);
-                torre5.position.set(-70,70,-20);
+                var torre5 = crearTorre(140, 60, 25);
+                torre5.position.set(-70, 70, -20);
                 scene.add(torre5);
 
-                var torre6 = crearTorre(140,60,25);
-                torre6.position.set(70,70,-20);
+                var torre6 = crearTorre(140, 60, 25);
+                torre6.position.set(70, 70, -20);
                 scene.add(torre6);
 
                 return pared;
@@ -112,14 +116,14 @@
 
                 outerGate.position.set(0, -gateBuildingHeight / 2, gateBuildingDepth / 2 + 0.2);
                 gateBuilding.add(outerGate);
-                innerGate.rotation.y = Math.PI; 
+                innerGate.rotation.y = Math.PI;
                 innerGate.position.set(0, -gateBuildingHeight / 2, -gateBuildingDepth / 2 - 0.2);
                 gateBuilding.add(innerGate);
 
                 // Crear piso
                 var roof = new THREE.Mesh(new THREE.CylinderGeometry(0, 35, 15, 4), roofMaterial);
                 roof.castShadow = true;
-                roof.rotation.y = 0.25*Math.PI;
+                roof.rotation.y = 0.25 * Math.PI;
                 roof.position.y = gateBuildingHeight / 2 + 8;
                 gateBuilding.add(roof);
 
@@ -184,7 +188,7 @@
 
                 frontUpperBuildingPart.position.set(0, buildingHeight / 2, buildingDepth / 2);
                 building.add(frontUpperBuildingPart);
-                backUpperBuildingPart.rotation.y = Math.PI; 
+                backUpperBuildingPart.rotation.y = Math.PI;
                 backUpperBuildingPart.position.set(0, buildingHeight / 2, -buildingDepth / 2);
                 building.add(backUpperBuildingPart);
 
@@ -202,7 +206,7 @@
                 building.add(leftRoof);
 
                 // crear puerta
-                var door = new THREE.Mesh(new THREE.PlaneGeometry(30, 36), new THREE.MeshLambertMaterial({color: 0x4e3100}));
+                var door = new THREE.Mesh(new THREE.PlaneGeometry(30, 36), new THREE.MeshLambertMaterial({ color: 0x4e3100 }));
 
                 door.position.z = buildingDepth / 2 + 0.2;
                 door.position.y = -30;
@@ -227,7 +231,7 @@
                 var z;
                 for (z = -buildingDepth / 2 + windowMargin; z < buildingDepth / 2 - windowMargin; z += windowMargin) {
                     wind = createWindow(windowXRadius, windowYRadius, windowMaterial);
-                    wind.rotation.y = -0.5*Math.PI;
+                    wind.rotation.y = -0.5 * Math.PI;
                     wind.position.set(-buildingWidth / 2 - 0.2, windowY, z);
                     building.add(wind);
                 }
@@ -235,7 +239,7 @@
                 // derecha
                 for (z = -buildingDepth / 2 + windowMargin; z < buildingDepth / 2 - windowMargin; z += windowMargin) {
                     wind = createWindow(windowXRadius, windowYRadius, windowMaterial);
-                    wind.rotation.y = 0.5*Math.PI;
+                    wind.rotation.y = 0.5 * Math.PI;
                     wind.position.set(buildingWidth / 2 + 0.2, windowY, z);
                     building.add(wind);
                 }
@@ -260,15 +264,15 @@
             frontpared.position.z = paredWidth / 2;
             castillo.add(frontpared);
 
-            leftpared.rotation.y = -0.5*Math.PI;
+            leftpared.rotation.y = -0.5 * Math.PI;
             leftpared.position.x = -paredWidth / 2;
             castillo.add(leftpared);
 
-            backpared.rotation.y = -1*Math.PI;
+            backpared.rotation.y = -1 * Math.PI;
             backpared.position.z = -paredWidth / 2;
             castillo.add(backpared);
 
-            rightpared.rotation.y = 0.5*Math.PI;
+            rightpared.rotation.y = 0.5 * Math.PI;
             rightpared.position.x = paredWidth / 2;
             castillo.add(rightpared);
 
@@ -285,14 +289,14 @@
             return castillo;
         }
 
-        function createisla(radioU,radioD,altura) {
-            var isla = new THREE.Mesh(new THREE.CylinderGeometry(radioU, radioD, altura, 80),  new THREE.MeshLambertMaterial({color: 0x00ff00}));
+        function createisla(radioU, radioD, altura) {
+            var isla = new THREE.Mesh(new THREE.CylinderGeometry(radioU, radioD, altura, 80), new THREE.MeshLambertMaterial({ color: 0x00ff00 }));
             isla.receiveShadow = true;
             return isla;
         }
 
         function addLight(scene) {
-            var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+            var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.8);
             hemiLight.position.set(0, 500, 0);
 
             scene.add(hemiLight);
@@ -317,57 +321,252 @@
             scene.add(dirLight);
         }
 
-        var scene = new THREE.Scene();
-        var renderer = new THREE.WebGLRenderer({antialias: true});
+
+        // DRAGON
+        const gradosARadianes = deg => (deg * Math.PI) / 180.0;
+        function hexToRgb(hex) {
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function crear_cubo(x, y, z, color) {
+            let cubeGeometry = new THREE.CubeGeometry(x, y, z);
+            cubeMaterial = new THREE.MeshLambertMaterial({ color: color, wireframe: false });
+            let object = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            object.castShadow = true;
+
+            return object;
+        }
+        function crear_cilindro(x, y, z, r, color) {
+            const geometry = new THREE.CylinderGeometry(x, y, z, r);
+            const material = new THREE.MeshBasicMaterial({ color: color });
+            const cylinder = new THREE.Mesh(geometry, material);
+            return cylinder;
+        }
+        function crear_esfera(r, x, y, color,opacity) {
+            const geometry = new THREE.SphereGeometry(r, x, y);
+            const material = new THREE.MeshBasicMaterial({ color: color,opacity: opacity,transparent: true, });
+            const sphere = new THREE.Mesh(geometry, material);
+            return sphere;
+        }
+        function crear_cono(rtop, rbotton, altura, resolucion, color) {
+            let geometry = new THREE.CylinderGeometry(rtop, rbotton, altura, resolucion);
+            let material = new THREE.MeshBasicMaterial({ color: color, wireframe: false });
+            let cone = new THREE.Mesh(geometry, material);
+            cone.castShadow = true;
+            return cone
+        }
+        function crear_cola(scale,color_base,color_alas) {
+            // Cola
+            class CustomSinCurve extends THREE.Curve {
+                constructor(scale = 1) {
+                    super();
+                    this.scale = scale;
+                }
+                getPoint(t, optionalTarget = new THREE.Vector3()) {
+                    const tx = t * 3 - 1.5;
+                    const ty = Math.sin(2 * Math.PI * t);
+                    const tz = 0;
+
+                    return optionalTarget.set(tx, ty, tz).multiplyScalar(this.scale);
+                }
+            }
+            const path = new CustomSinCurve(scale);
+            const geometry = new THREE.TubeGeometry(path, 20, 3, 8, false);
+            const material = new THREE.MeshBasicMaterial({ color: color_base, wireframe: false });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.castShadow = true;
+            // Cono
+            cono = crear_cono(.5, 8, 10, 32, color_alas);
+            cono.position.set(17, 0, 0);
+            cono.rotation.z = gradosARadianes(-45);
+            mesh.add(cono);
+
+            return mesh
+        }
+        function crear_cabeza(color_base,color_alas) {
+            let cabeza = new THREE.Object3D();
+
+            base = crear_cubo(40, 55, 80, color_base);
+            base.position.set(0, 30, 70);
+            // Cuernos
+            cuerno1 = crear_cono(1, 7, 10, 3, color_alas);
+            cuerno1.position.set(10, 63, 40);
+            cuerno2 = crear_cono(1, 7, 10, 3, color_alas);
+            cuerno2.position.set(-10, 63, 40);
+            // Orejas
+            oreja1 = crear_cubo(25, 4, 13, color_base);
+            oreja1.position.set(-24, 65, 30);
+            oreja1.rotation.z = gradosARadianes(-80)
+            oreja1.rotation.x = gradosARadianes(-15)
+            oreja2 = crear_cubo(25, 4, 13, color_base);
+            oreja2.position.set(24, 65, 30);
+            oreja2.rotation.z = gradosARadianes(80)
+            oreja2.rotation.x = gradosARadianes(-15)
+            // Ojos
+            ojoDer = crear_cubo(1, 25, 25, 0xffffff);
+            ojoDer.position.set(-20, 40, 55);
+            ojoDerP = crear_cubo(2, 15, 15, 0x000000);
+            ojoDerP.position.set(-21, 39, 60);
+            ojoIzq = crear_cubo(1, 25, 25, 0xffffff);
+            ojoIzq.position.set(20, 40, 55);
+            ojoIzqP = crear_cubo(2, 15, 15, 0x000000);
+            ojoIzqP.position.set(21, 39, 60);
+            // Boca
+            boca = crear_cubo(35, 5, 35, color_base);
+            boca.position.set(0, 0, 90);
+            boca.rotation.x = gradosARadianes(15);
+            lengua = crear_cubo(20, 3, 34, 0xed5c5c);
+            lengua.position.set(0, 2, 90);
+            lengua.rotation.x = gradosARadianes(15);
+            // Nariz
+            nariz = crear_cubo(5, 5, 5, 0x000000);
+            nariz.position.set(5, 46, 110);
+            nariz2 = crear_cubo(5, 5, 5, 0x000000);
+            nariz2.position.set(-5, 46, 110);
+
+            cabeza.add(base);
+            cabeza.add(cuerno1); cabeza.add(cuerno2);
+            cabeza.add(oreja1); cabeza.add(oreja2);
+            cabeza.add(ojoDer); cabeza.add(ojoDerP);
+            cabeza.add(ojoIzq); cabeza.add(ojoIzqP);
+            cabeza.add(boca); cabeza.add(lengua); cabeza.add(nariz); cabeza.add(nariz2);
+            return cabeza;
+        }
+
+        function dragon(color_base,color_alas) {
+            let dragon = new THREE.Object3D();
+            //body
+            body = crear_cubo(40, 40, 50, color_base);
+            body.position.set(0, 0, 0)
+            body.rotation.z = 95;
+            //Alas
+            ala1 = crear_cubo(30, 5, 40, color_alas);
+            ala1.position.set(30, 20, 0);
+
+            ala2 = crear_cubo(30, 5, 40, color_alas);
+            ala2.position.set(-30, 20, 0);
+
+            //Patas
+            p1 = crear_cubo(20, 10, 25, color_base);
+            p1.position.set(-20, -35, 15);
+
+            p2 = crear_cubo(20, 10, 25, color_base);
+            p2.position.set(20, -35, 15);
+
+            p3 = crear_cubo(20, 10, 25, color_base);
+            p3.position.set(-20, -35, -20);
+
+            p4 = crear_cubo(20, 10, 25, color_base);
+            p4.position.set(20, -35, -20);
+
+            // Cola
+            cola = crear_cola(10,color_base,color_alas)
+            cola.position.set(0, 0, -40)
+            cola.rotation.y = gradosARadianes(90)
+
+            // Cabeza
+            cabeza = crear_cabeza(color_base,color_alas)
+            cabeza.position.set(0, 0, 0)
+
+            //ADD
+            dragon.add(body);
+            dragon.add(ala1); dragon.add(ala2);
+            dragon.add(p1); dragon.add(p2); dragon.add(p3); dragon.add(p4);
+            dragon.add(cola);
+            dragon.add(cabeza);
+
+            // const axesHelper = new THREE.AxisHelper(100);
+            // dragon.add(axesHelper);
+
+            return dragon;
+        }
+
+
+        // FIN DRAGON
+
+
+
+        scene = new THREE.Scene();
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
 
         renderer.setClearColor(0x9fd2f1, 1.0); //  color cielo
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
 
-        const geometry = new THREE.RingGeometry( 400, 240, 320 );
-        const material = new THREE.MeshBasicMaterial( { color: 0x1acffa, side: THREE.DoubleSide } );
-        const mesh = new THREE.Mesh( geometry, material );
-        mesh.receiveShadow  = true;
-        mesh.rotation.x = -0.5*Math.PI;
-        
+        const geometry = new THREE.RingGeometry(400, 240, 320);
+        const material = new THREE.MeshBasicMaterial({ color: 0x1acffa, side: THREE.DoubleSide });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.receiveShadow = true;
+        mesh.rotation.x = -0.5 * Math.PI;
 
-        var planeGeometry = new THREE.PlaneGeometry(1500, 1200);
+
+        var planeGeometry = new THREE.PlaneGeometry(2000, 2000);
         var groundMaterial = new THREE.MeshLambertMaterial({
-                    map: createRepeatingTexture("texture/grass3.jpg", 5, 5)
+            map: createRepeatingTexture("texture/grass3.jpg", 5, 5)
         });
 
         var plane = new THREE.Mesh(planeGeometry, groundMaterial);
 
-        plane.receiveShadow  = true;
-        plane.rotation.x = -0.5*Math.PI;
-        plane.position.y= -5;
-        
+        plane.receiveShadow = true;
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.y = -5;
+
         scene.add(plane);
         scene.add(mesh);
 
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
         camera.position.x = 0;
-        camera.position.y = 165;
-        camera.position.z = 235;
+        camera.position.y = 300;
+        camera.position.z = 1000;
         camera.lookAt(scene.position);
+
+        //Agregando dragon -----------------------------------------------------
+        let drag = dragon(0x6edb8b, 0xc4d950);
+        drag.position.set(450, 40, -250);
+        drag.rotation.y = gradosARadianes(-45)
+        scene.add(drag)
+
+        let drag2 = dragon(0xb8833e,0xb8833e);
+        drag2.position.set(-300, 150, -200);
+        drag2.rotation.y = gradosARadianes(45)
+        drag2.rotation.x = gradosARadianes(15)
+        scene.add(drag2)
+
+        let drag3 = dragon(0xb6c210,0xe2e3cf);
+        drag3.position.set(560, 90, 340);
+        drag3.rotation.y = gradosARadianes(-70)
+        drag3.rotation.x = gradosARadianes(10)
+        scene.add(drag3)
+
+        let sol = crear_esfera(50,10,10,0xf08126,1);
+        sol.position.set(250,400,-450);
+        let sol2 = crear_esfera(90,10,20,0xf08126,0.5);
+        sol2.position.set(250,400,-450);
+        
+        scene.add(sol);scene.add(sol2)
 
         // añadir isla y castillo
 
-        var isla = createisla(200,250,10);
+        var isla = createisla(200, 250, 10);
         scene.add(isla);
 
         var castillo = CrearCastillo();
         castillo.position.y = 5;
         isla.add(castillo);
 
-        var isla2 = createisla(80,120,15);
-        isla2.position.set(-450,25,300);
+        var isla2 = createisla(80, 120, 15);
+        isla2.position.set(-450, 25, 300);
         scene.add(isla2);
 
-        var isla3 = createisla(80,120,15);
-        isla3.position.set(450,25,300);
-
+        var isla3 = createisla(80, 120, 15);
+        isla3.position.set(450, 25, 300);
         scene.add(isla3);
+
         addLight(scene);
         $("#WebGL-output").append(renderer.domElement);
 
@@ -387,7 +586,22 @@
             cameraControls.update();
             requestAnimationFrame(render);
             renderer.render(scene, camera);
+
+            //NO FUNCION, SOBRECARGA LA MEMORIA PASANDO ALGUNOS MINUTOS
+            // celeste -= (velocidad);
+            // if (celeste >= 1.00) {
+            //     velocidad *= -1;
+            // }
+            // if (celeste <= -1.00) {
+            //     velocidad *= -1;
+            // }
+            // ala1.rotation.z = celeste;
+            // ala1.position.set(-20* Math.sin(celeste), 55+30* Math.sin(celeste), 0);
+
+            // ala2.rotation.z = celeste;
+            // ala2.position.set(10 + 30 * Math.cos(celeste), 35 + 30 * Math.sin(celeste), 0);
         };
-</script>
+    </script>
 </body>
+
 </html>
