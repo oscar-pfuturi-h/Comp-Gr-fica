@@ -347,9 +347,9 @@
             const cylinder = new THREE.Mesh(geometry, material);
             return cylinder;
         }
-        function crear_esfera(r, x, y, color,opacity) {
+        function crear_esfera(r, x, y, color, opacity) {
             const geometry = new THREE.SphereGeometry(r, x, y);
-            const material = new THREE.MeshBasicMaterial({ color: color,opacity: opacity,transparent: true, });
+            const material = new THREE.MeshBasicMaterial({ color: color, opacity: opacity, transparent: true, });
             const sphere = new THREE.Mesh(geometry, material);
             return sphere;
         }
@@ -360,7 +360,7 @@
             cone.castShadow = true;
             return cone
         }
-        function crear_cola(scale,color_base,color_alas) {
+        function crear_cola(scale, color_base, color_alas) {
             // Cola
             class CustomSinCurve extends THREE.Curve {
                 constructor(scale = 1) {
@@ -388,7 +388,7 @@
 
             return mesh
         }
-        function crear_cabeza(color_base,color_alas) {
+        function crear_cabeza(color_base, color_alas) {
             let cabeza = new THREE.Object3D();
 
             base = crear_cubo(40, 55, 80, color_base);
@@ -438,7 +438,7 @@
             return cabeza;
         }
 
-        function dragon(color_base,color_alas) {
+        function dragon(color_base, color_alas) {
             let dragon = new THREE.Object3D();
             //body
             body = crear_cubo(40, 40, 50, color_base);
@@ -465,12 +465,12 @@
             p4.position.set(20, -35, -20);
 
             // Cola
-            cola = crear_cola(10,color_base,color_alas)
+            cola = crear_cola(10, color_base, color_alas)
             cola.position.set(0, 0, -40)
             cola.rotation.y = gradosARadianes(90)
 
             // Cabeza
-            cabeza = crear_cabeza(color_base,color_alas)
+            cabeza = crear_cabeza(color_base, color_alas)
             cabeza.position.set(0, 0, 0)
 
             //ADD
@@ -486,9 +486,31 @@
             return dragon;
         }
 
+        // CASA BASICA
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        function crear_casa() {
+            let casa = new THREE.Object3D();
 
-        // FIN DRAGON
+            body = crear_cubo(40, 40, 40, 0xe6b96c);
+            body.position.set(0, 0, 0)
 
+            techo = crear_cilindro(2, 35, 30, 20, 0x5e3e07);
+            techo.position.set(0, 35, 0);
+
+            ventana = crear_cubo(2, 15, 20, 0x86aeeb);
+            ventana.position.set(-23, 5, 0);
+
+            puerta = crear_cubo(16, 30, 1, 0x734b20);
+            puerta.position.set(0, -5, 21)
+
+
+
+            casa.add(body); casa.add(techo), casa.add(ventana); casa.add(puerta)
+
+            return casa;
+        }
 
 
         scene = new THREE.Scene();
@@ -531,25 +553,30 @@
         drag.rotation.y = gradosARadianes(-45)
         scene.add(drag)
 
-        let drag2 = dragon(0xb8833e,0xb8833e);
+        let drag2 = dragon(0xb8833e, 0xb8833e);
         drag2.position.set(-300, 150, -200);
         drag2.rotation.y = gradosARadianes(45)
         drag2.rotation.x = gradosARadianes(15)
         scene.add(drag2)
 
-        let drag3 = dragon(0xb6c210,0xe2e3cf);
+        let drag3 = dragon(0xb6c210, 0xe2e3cf);
         drag3.position.set(560, 90, 340);
         drag3.rotation.y = gradosARadianes(-70)
         drag3.rotation.x = gradosARadianes(10)
         scene.add(drag3)
+        // SOL--------------------------------------------------------------------
+        let sol = crear_esfera(50, 10, 10, 0xf08126, 1);
+        sol.position.set(250, 400, -450);
+        let sol2 = crear_esfera(90, 10, 20, 0xe8ff4f, 0.5);
+        sol2.position.set(250, 400, -450);
 
-        let sol = crear_esfera(50,10,10,0xf08126,1);
-        sol.position.set(250,400,-450);
-        let sol2 = crear_esfera(90,10,20,0xf08126,0.5);
-        sol2.position.set(250,400,-450);
-        
-        scene.add(sol);scene.add(sol2)
+        scene.add(sol); scene.add(sol2)
 
+        // Casa basica--------------------------------------------------------------------
+        let casa = crear_casa();
+        casa.position.set(-500, 15, -50);
+
+        scene.add(casa)
         // añadir isla y castillo
 
         var isla = createisla(200, 250, 10);
