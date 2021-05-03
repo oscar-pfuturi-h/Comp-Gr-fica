@@ -38,6 +38,13 @@ class Sphere {
         }
     }
 }
+
+
+
+
+
+
+
 const axis = new THREE.Vector3(80, 1, 3.18).normalize();
 // sol
 var sunGeometry = new THREE.SphereGeometry(69.6, 64, 64);
@@ -46,6 +53,8 @@ const texture_2 = new THREE.TextureLoader().load('textures/sunspecular.jpg');
 var sunMaterial = new THREE.MeshBasicMaterial({map: texture_1});
 var sun = new THREE.Mesh(sunGeometry, sunMaterial);
 sun.position = [0, 0, 0];
+
+
 
 var earth = new Sphere(6.3, 32, 32, ['textures/earth.jpg', 'textures/earthbump.jpg', 'textures/earthspecular.jpg']);
 earth.position = [80, 0, 0];
@@ -56,19 +65,16 @@ var earthAtmosphere = new THREE.Mesh(sphereGeometry, material);
 earthAtmosphere.position.set(0, 0, 0);
 earth.mesh.add(earthAtmosphere);
 
+
+
+
 var moon = new Sphere(0.1, 10, 10, ['textures/moon.jpg', null, null]);
 moon.position = [81, 0, 0];
 var mars = new Sphere(3.3, 24, 24, ['textures/mars.jpg', null, null]);
 mars.position = [100, 0, 0];
 
-var camera = new THREE.PerspectiveCamera(
-    75, // angulo
-    window.innerWidth/window.innerHeight, // aspect, es lo que ve la camara
-    0.1, // near
-    1000 // far
-);
-camera.useQuaternion = true;
-camera.position.set(100, 100, 100);
+
+
 
 var quaternion = new THREE.Quaternion();
 
@@ -94,40 +100,76 @@ function updateLight() {
 }
 updateLight();
 
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+const canvas = document.querySelector('#c');
+const renderer = new THREE.WebGLRenderer({canvas});
+
+
+
+var camera = new THREE.PerspectiveCamera(
+    75, // angulo
+    window.innerWidth/window.innerHeight, // aspect, es lo que ve la camara
+    0.1, // near
+    1000 // far
+);
+camera.useQuaternion = true;
+camera.position.set(100, 100, 100);
+
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.target.set(0, 0, 0);
+controls.update();
+
+
+
 
 renderer.render( scene, camera );
 
-// para los controles del mouse
-var controls = new THREE.OrbitControls( camera, renderer.domElement );
-controls.minDistance = 3; // minima distancia a q puede hacer zoom
-controls.maxDistance = 300; // maxima distancia a q puede hacer zoom
 
-window.addEventListener('resize', redimensionar);
-function redimensionar(){
-    // actualizamos las vcariables que dependen del tamanio del navegador
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.render( scene, camera );
-}
+  {
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(
+      'textures/universo_4k.jpg',
+      () => {
+        const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+        rt.fromEquirectangularTexture(renderer, texture);
+        scene.background = rt.texture;
+      });
+  }
 
-var animate = function(){
-    requestAnimationFrame(animate);            
 
-    // para recorrer cada objeto de la scena (tambien incluye la camara)
+function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
+
+
+function render(time) {
+    time *= 0.001;
+
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
     scene.traverse(function(object){
         if (object.isMesh == true){ // para evitar rotar la camara
             object.rotation.y += 0.001;
         }
     });
+
     quaternion.setFromAxisAngle(axis, 0.01);
     moon.mesh.position.applyQuaternion(quaternion);
 
-    //circle.rotation 
-    renderer.render( scene, camera );
-}
+    renderer.render(scene, camera);
 
-animate()
+    requestAnimationFrame(render);
+  }
+
+
+requestAnimationFrame(render);
