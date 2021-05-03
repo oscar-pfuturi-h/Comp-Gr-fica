@@ -332,7 +332,6 @@
                 b: parseInt(result[3], 16)
             } : null;
         }
-
         function crear_cubo(x, y, z, color) {
             let cubeGeometry = new THREE.CubeGeometry(x, y, z);
             cubeMaterial = new THREE.MeshLambertMaterial({ color: color, wireframe: false });
@@ -438,6 +437,7 @@
             return cabeza;
         }
 
+        
         function dragon(color_base, color_alas) {
             let dragon = new THREE.Object3D();
             //body
@@ -503,11 +503,39 @@
             ventana.position.set(-23, 5, 0);
 
             puerta = crear_cubo(16, 30, 1, 0x734b20);
-            puerta.position.set(0, -5, 21)
+            puerta.position.set(0, -5, 21);
+
+            //Arbol
+            arbol1 = crear_cilindro(10,10,50,10,0x5e3e07);
+            arbol1.position.set(-150,5,50);
+            arbol1_cesped = crear_cilindro(1,20,40,10,0x25a131)
+            arbol1_cesped.position.set(-150,50,50)
+
+            //Arbol
+            arbol2 = crear_cilindro(10,10,30,10,0x5e3e07);
+            arbol2.position.set(-150,-10,-50);
+            arbol2_cesped = crear_cilindro(1,20,40,10,0x25a131)
+            arbol2_cesped.position.set(-150,10,-50)
+
+            //Arbol
+            arbol3 = crear_cilindro(10,10,50,10,0x5e3e07);
+            arbol3.position.set(90,5,50);
+            arbol3_cesped = crear_cilindro(1,20,40,10,0x25a131)
+            arbol3_cesped.position.set(90,50,50)
+
+            //Arbol
+            arbol4 = crear_cilindro(10,10,50,10,0x5e3e07);
+            arbol4.position.set(60,5,50);
+            arbol4_cesped = crear_cilindro(1,20,40,10,0x25a131)
+            arbol4_cesped.position.set(60,50,50)
 
 
 
             casa.add(body); casa.add(techo), casa.add(ventana); casa.add(puerta)
+            casa.add(arbol1);casa.add(arbol1_cesped);
+            casa.add(arbol2);casa.add(arbol2_cesped);
+            casa.add(arbol3);casa.add(arbol3_cesped);
+            casa.add(arbol4);casa.add(arbol4_cesped);
 
             return casa;
         }
