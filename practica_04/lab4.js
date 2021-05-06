@@ -1,5 +1,3 @@
-import {Interaction} from './jsm/three.interaction.module.js';
-
 class Sphere {
     constructor(radius, alpha, theta, x, y, z, textures) {
         this.r = radius;
@@ -82,6 +80,16 @@ var sunGeometry2 = new THREE.SphereGeometry(sunRadius + 3.48, 64, 64);
 var sunMaterial2 = new THREE.MeshBasicMaterial({color: 0xff3200, opacity: 0.15,transparent: true});
 var sunShine = new THREE.Mesh(sunGeometry2, sunMaterial2);
 sun.add(sunShine);
+var spriteMaterial = new THREE.SpriteMaterial(
+    {
+        map: new THREE.TextureLoader().load("textures/sunlight.png")
+        , color: 0xffffee
+        , transparent: false
+        , blending: THREE.AdditiveBlending
+    });
+var sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(1270, 1270, 1270.0);
+sun.add(sprite);
 
 // reduccion de la distancia 1/2000000
 // reduccion del radio 1/2000
@@ -92,7 +100,7 @@ var venus = new Planet(3.0, 32, 32, sunRadius + 54.1, 0, 0, ['textures/venus.jpg
 var earth = new Planet(3.18, 32, 32, sunRadius + 74.8, 0, 0, ['textures/earth.jpg', 'textures/earthbump.jpg','textures/earthspecular.jpg'],                       'Tierra', 104.115, 0.03, 1, sunRadius + 74.8);
 earth.mesh.receiveShadow = true;
 var moon = new Planet(0.8, 10, 10, 8.0, 0, 0, ['textures/moon.jpg', null, null], 'Luna', 3.5, 0.028, 0, 8.0);
-moon.mesh.receiveShadow = true;
+moon.mesh.receiveShadow = true; 
 moon.mesh.castShadow = true;
 
 var mars = new Planet(1.7, 24, 24, sunRadius + 114.0, 0, 0, ['textures/mars.jpg', 'textures/marsbump.jpg', null], 
@@ -100,6 +108,8 @@ var mars = new Planet(1.7, 24, 24, sunRadius + 114.0, 0, 0, ['textures/mars.jpg'
 // reduccion de la distancia al sol 1/4000000
 var jupiter = new Planet(40.0, 64, 64, sunRadius + 194.62, 0, 0, ['textures/jupiter.jpg', null, null], 
                         'Júpiter', 260.6, 0.04, 5, sunRadius + 194.62);
+var europa = new Planet(1.2, 10, 10, 48.0, 0, 0, ['textures/moon.jpg', null, null], 'Luna', 4.5, 0.028, 0, 48.0);
+
 var saturno = new Planet(29.1, 48, 48, sunRadius + 358.5, 0, 0, ['textures/saturn.jpg', null, null],
                         'Saturno', 321.73, 0.012, 2, sunRadius + 358.5);
 // 1/6000000
@@ -129,24 +139,22 @@ function createVisibleOrbits(distance, segments, name) {
         0);
 }
 
-function getTorus(size, innerDiameter, segments, myColor, name, distance) {
+function getTorus(size, innerDiameter, segments, myColor, distance) {
     var ringGeometry = new THREE.TorusGeometry(size, innerDiameter, segments, segments);
-    var ringMaterial = new THREE.MeshBasicMaterial({color: myColor, side: THREE.DoubleSide});
+    var ringMaterial = new THREE.MeshPhongMaterial({color: myColor, side: THREE.DoubleSide});
     var myRing = new THREE.Mesh(ringGeometry, ringMaterial);
-    myRing.name = name;
     myRing.position.set(distance, 0, 0);
     myRing.rotation.x = Math.PI / 2;
     scene.add(myRing);
     return myRing;
 }
 
-const canvas = document.querySelector('#c');
-const renderer = new THREE.WebGLRenderer({canvas});
+
 var camera = new THREE.PerspectiveCamera(
     75, // angulo
     window.innerWidth/window.innerHeight, // aspect, es lo que ve la camara
     0.1, // near
-    3000 // far
+    1500 // far
 );
 camera.position.set(500, 500, 500);
 
@@ -154,8 +162,7 @@ const axis = new THREE.Vector3(0, 1, 0);
 
 
 var scene = new THREE.Scene();
-const axesHelper = new THREE.AxesHelper( 15 );
-scene.add( axesHelper );
+
 scene.add(sun);
 scene.add(mercury.mesh);
 scene.add(venus.mesh);
@@ -163,6 +170,7 @@ scene.add(earth.mesh);
 scene.add(moon.mesh);
 scene.add(mars.mesh);
 scene.add(jupiter.mesh);
+scene.add(europa.mesh);
 scene.add(saturno.mesh);
 scene.add(urano.mesh);
 scene.add(neptuno.mesh);
@@ -177,7 +185,18 @@ createVisibleOrbits(saturno.distance, 640, saturno.name);
 createVisibleOrbits(urano.distance, 640, urano.name);
 createVisibleOrbits(neptuno.distance, 640, neptuno.name);
 
-var ring = getTorus(48, 1.5, 480, 0x757064, "Anillo de Saturno", saturno.distance);
+var rings = [
+    getTorus(44, 0.8, 48, 0xd9a55e, saturno.distance),
+    getTorus(41, 0.8, 48, 0xd9a55e, saturno.distance),
+    getTorus(38, 0.8, 48, 0xd9a55e, saturno.distance),
+    getTorus(35, 0.8, 48, 0xd9a55e, saturno.distance)
+];
+var rings2 = [
+    getTorus(32, 0.4, 48, 0x7a8a93, urano.distance),
+    getTorus(30, 0.4, 48, 0x7a8a93, urano.distance),
+    getTorus(28, 0.4, 48, 0x7a8a93, urano.distance),
+    getTorus(26, 0.4, 48, 0x7a8a93, urano.distance)
+];
 
 const color = 0xFFFFFF;
 const intensity = 1.0;
@@ -196,17 +215,12 @@ function updateLight() {
 }
 updateLight();
 
-//var renderer = new THREE.WebGLRenderer();
+var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 renderer.render( scene, camera );
-/*
-const interaction = new Interaction(renderer, scene, camera);
-sun.cursor = 'pointer';
-sun.on('click', function (ev) {
-    console.log('Sol');
-})*/
+
 
 {
     const loader = new THREE.TextureLoader();
@@ -230,18 +244,10 @@ sun.on('click', function (ev) {
     return needResize;
   }
 // para los controles del mouse
-var controls = new THREE.OrbitControls( camera, canvas );
+var controls = new THREE.OrbitControls( camera, renderer.domElement );
 controls.minDistance = 3; // minima distancia a q puede hacer zoom
 controls.maxDistance = 2000; // maxima distancia a q puede hacer zoom
-/*
-window.addEventListener('resize', redimensionar);
-function redimensionar(){
-    // actualizamos las vcariables que dependen del tamanio del navegador
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.render( scene, camera );
-}*/
+
 
 var animate = function(){
     requestAnimationFrame(animate);            
@@ -250,12 +256,7 @@ var animate = function(){
         camera.aspect = canvas.clientWidth / canvas.clientHeight;
         camera.updateProjectionMatrix();
       }
-    // para recorrer cada objeto de la scena (tambien incluye la camara)
-    /*scene.traverse(function(object){
-        if (object.isMesh == true){ // para evitar rotar la camara
-            object.rotation.y += 0.001;
-        }
-    });*/
+
     sun.rotation.y += 0.0001;
     mercury.move();
     venus.move();
@@ -263,9 +264,16 @@ var animate = function(){
     moon.moveMoon(earth.mesh.position);
     mars.move();
     jupiter.move();
+    europa.moveMoon(jupiter.mesh.position);
     saturno.move();
-    ring.position.set(saturno.mesh.position.x, 0, saturno.mesh.position.z);
+    for (let ring of rings) {
+        ring.position.set(saturno.mesh.position.x, 0, saturno.mesh.position.z)
+    }
+    
     urano.move();
+    for (let ring of rings2) {
+        ring.position.set(urano.mesh.position.x, 0, urano.mesh.position.z)
+    }
     neptuno.move();
 
     renderer.render( scene, camera );
