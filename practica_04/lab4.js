@@ -140,12 +140,13 @@ function getTorus(size, innerDiameter, segments, myColor, name, distance) {
     return myRing;
 }
 
-
+const canvas = document.querySelector('#c');
+const renderer = new THREE.WebGLRenderer({canvas});
 var camera = new THREE.PerspectiveCamera(
     75, // angulo
     window.innerWidth/window.innerHeight, // aspect, es lo que ve la camara
     0.1, // near
-    1000 // far
+    3000 // far
 );
 camera.position.set(500, 500, 500);
 
@@ -195,7 +196,7 @@ function updateLight() {
 }
 updateLight();
 
-var renderer = new THREE.WebGLRenderer();
+//var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -229,7 +230,7 @@ sun.on('click', function (ev) {
     return needResize;
   }
 // para los controles del mouse
-var controls = new THREE.OrbitControls( camera, renderer.domElement );
+var controls = new THREE.OrbitControls( camera, canvas );
 controls.minDistance = 3; // minima distancia a q puede hacer zoom
 controls.maxDistance = 2000; // maxima distancia a q puede hacer zoom
 /*
