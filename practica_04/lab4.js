@@ -1,3 +1,5 @@
+import {Interaction} from './jsm/three.interaction.module.js';
+
 class Sphere {
     constructor(radius, alpha, theta, x, y, z, textures) {
         this.r = radius;
@@ -65,8 +67,7 @@ class Planet extends Sphere {
     }
 }
 
-var globalRate = 1.0;
-
+var globalRate = 1.0, planetOrbit;
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
 
 // sol
@@ -77,24 +78,67 @@ const texture_1 = new THREE.TextureLoader().load('textures/sun.jpg');
 var sunMaterial = new THREE.MeshBasicMaterial({map: texture_1});
 var sun = new THREE.Mesh(sunGeometry, sunMaterial);
 sun.position.set(0, 0, 0);
+var sunGeometry2 = new THREE.SphereGeometry(sunRadius + 3.48, 64, 64);
+var sunMaterial2 = new THREE.MeshBasicMaterial({color: 0xff3200, opacity: 0.15,transparent: true});
+var sunShine = new THREE.Mesh(sunGeometry2, sunMaterial2);
+sun.add(sunShine);
 
-// reduccion de la distancia 1/1000000
-// reduccion del radio 1/1000
-var mercury = new Planet(2.4, 12, 12, sunRadius + 57.90, 0, 0, ['textures/mercury.jpg', 'textures/mercurybump.jpg', null], 
-                        'Mercurio', 58.64, 0.015, 0, sunRadius + 57.90);
-var venus = new Planet(6.0, 32, 32, sunRadius + 108.2, 0, 0, ['textures/venus.jpg', 'textures/venusbump.jpg', null], 
-                        'Venus', 73.55, 0.015, 0, sunRadius + 108.2);
-var earth = new Planet(6.3, 32, 32, sunRadius+149.6, 0, 0, ['textures/earth.jpg', 'textures/earthbump.jpg','textures/earthspecular.jpg'],                       'Tierra', 104.115, 0.015, 1, sunRadius + 149.6);
-var moon = new Planet(1.7, 10, 10, 10.0, 0, 0, ['textures/moon.jpg', null, null], 'Luna', 3.5, 0.01, 0, 10.0);
+// reduccion de la distancia 1/2000000
+// reduccion del radio 1/2000
+var mercury = new Planet(1.2, 12, 12, sunRadius + 29.0, 0, 0, ['textures/mercury.jpg', 'textures/mercurybump.jpg', null], 
+                        'Mercurio', 58.64, 0.005, 0, sunRadius + 29.0);
+var venus = new Planet(3.0, 32, 32, sunRadius + 54.1, 0, 0, ['textures/venus.jpg', 'textures/venusbump.jpg', null], 
+                        'Venus', 73.55, 0.003, 0, sunRadius + 54.1);
+var earth = new Planet(3.18, 32, 32, sunRadius + 74.8, 0, 0, ['textures/earth.jpg', 'textures/earthbump.jpg','textures/earthspecular.jpg'],                       'Tierra', 104.115, 0.03, 1, sunRadius + 74.8);
+earth.mesh.receiveShadow = true;
+var moon = new Planet(0.8, 10, 10, 8.0, 0, 0, ['textures/moon.jpg', null, null], 'Luna', 3.5, 0.028, 0, 8.0);
+moon.mesh.receiveShadow = true;
+moon.mesh.castShadow = true;
 
-var mars = new Planet(3.3, 24, 24, sunRadius + 227.9, 0, 0, ['textures/mars.jpg', 'textures/marsbump.jpg', null], 
-                        'Marte', 141.05, 0.015, 1, sunRadius + 227.9);
-// reduccion de la distancia al sol 1/2000000
-var jupiter = new Planet(69.9, 64, 64, sunRadius + 389.2, 0, 0, ['textures/jupiter.jpg', null, null], 
-                        'Júpiter', 260.6, 0.015, 5, sunRadius + 389.2);
-var saturno = new Planet(58.2, 48, 48, sunRadius + 717.0, 0, 0, ['textures/saturn.jpg', null, null],
-                        'Saturno', 321.73, 0.015, 2, sunRadius + 717.0);
+var mars = new Planet(1.7, 24, 24, sunRadius + 114.0, 0, 0, ['textures/mars.jpg', 'textures/marsbump.jpg', null], 
+                        'Marte', 141.05, 0.015, 1, sunRadius + 114.0);
+// reduccion de la distancia al sol 1/4000000
+var jupiter = new Planet(40.0, 64, 64, sunRadius + 194.62, 0, 0, ['textures/jupiter.jpg', null, null], 
+                        'Júpiter', 260.6, 0.04, 5, sunRadius + 194.62);
+var saturno = new Planet(29.1, 48, 48, sunRadius + 358.5, 0, 0, ['textures/saturn.jpg', null, null],
+                        'Saturno', 321.73, 0.012, 2, sunRadius + 358.5);
+// 1/6000000
+var urano = new Planet(12.6, 16, 16, sunRadius + 478.5, 0, 0, ['textures/uranus.jpg', null, null],
+                        'Urano', 378.32, 0.004, 2, sunRadius + 478.5);
+var neptuno = new Planet(12.3, 16, 16, sunRadius + 749.16, 0, 0, ['textures/neptune.jpg', null, null],
+                        'Neptuno', 517.21, 0.002, 2, sunRadius + 749.16);
 
+function getRing(size, innerDiameter, segments, myColor, name, x) {
+    var ringGeometry = new THREE.RingGeometry(size, innerDiameter, segments);
+    var ringMaterial = new THREE.MeshBasicMaterial({color: myColor, side: THREE.DoubleSide});
+    var myRing = new THREE.Mesh(ringGeometry, ringMaterial);
+    myRing.name = name;
+    myRing.position.set(x, 0, 0);
+    myRing.rotation.x = Math.PI / 2;
+    scene.add(myRing);
+    return myRing;
+}
+function createVisibleOrbits(distance, segments, name) {
+    var orbitWidth = 0.05;
+    planetOrbit = getRing(
+        distance + orbitWidth, 
+        distance - orbitWidth, 
+        segments, 
+        0xffffff, 
+        name, 
+        0);
+}
+
+function getTorus(size, innerDiameter, segments, myColor, name, distance) {
+    var ringGeometry = new THREE.TorusGeometry(size, innerDiameter, segments, segments);
+    var ringMaterial = new THREE.MeshBasicMaterial({color: myColor, side: THREE.DoubleSide});
+    var myRing = new THREE.Mesh(ringGeometry, ringMaterial);
+    myRing.name = name;
+    myRing.position.set(distance, 0, 0);
+    myRing.rotation.x = Math.PI / 2;
+    scene.add(myRing);
+    return myRing;
+}
 
 
 var camera = new THREE.PerspectiveCamera(
@@ -107,12 +151,10 @@ camera.position.set(500, 500, 500);
 
 const axis = new THREE.Vector3(0, 1, 0);
 
-const lightA = new THREE.AmbientLight(0x101010);
 
 var scene = new THREE.Scene();
 const axesHelper = new THREE.AxesHelper( 15 );
 scene.add( axesHelper );
-scene.add(lightA);
 scene.add(sun);
 scene.add(mercury.mesh);
 scene.add(venus.mesh);
@@ -121,6 +163,20 @@ scene.add(moon.mesh);
 scene.add(mars.mesh);
 scene.add(jupiter.mesh);
 scene.add(saturno.mesh);
+scene.add(urano.mesh);
+scene.add(neptuno.mesh);
+
+
+createVisibleOrbits(earth.distance, 640, earth.name);
+createVisibleOrbits(mercury.distance, 640, mercury.name);
+createVisibleOrbits(venus.distance, 640, venus.name);
+createVisibleOrbits(mars.distance, 640, mars.name);
+createVisibleOrbits(jupiter.distance, 640, jupiter.name);
+createVisibleOrbits(saturno.distance, 640, saturno.name);
+createVisibleOrbits(urano.distance, 640, urano.name);
+createVisibleOrbits(neptuno.distance, 640, neptuno.name);
+
+var ring = getTorus(48, 1.5, 480, 0x757064, "Anillo de Saturno", saturno.distance);
 
 const color = 0xFFFFFF;
 const intensity = 1.0;
@@ -128,6 +184,8 @@ const light = new THREE.PointLight(color, intensity);
 light.position.set(0, 0, 0);
 scene.add(light);
 
+const lightA = new THREE.AmbientLight(0x101010);
+scene.add(lightA);
 
 const helper = new THREE.PointLightHelper(light);
 scene.add(helper);
@@ -142,6 +200,12 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 renderer.render( scene, camera );
+/*
+const interaction = new Interaction(renderer, scene, camera);
+sun.cursor = 'pointer';
+sun.on('click', function (ev) {
+    console.log('Sol');
+})*/
 
 {
     const loader = new THREE.TextureLoader();
@@ -168,7 +232,15 @@ renderer.render( scene, camera );
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
 controls.minDistance = 3; // minima distancia a q puede hacer zoom
 controls.maxDistance = 2000; // maxima distancia a q puede hacer zoom
-
+/*
+window.addEventListener('resize', redimensionar);
+function redimensionar(){
+    // actualizamos las vcariables que dependen del tamanio del navegador
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.render( scene, camera );
+}*/
 
 var animate = function(){
     requestAnimationFrame(animate);            
@@ -177,7 +249,12 @@ var animate = function(){
         camera.aspect = canvas.clientWidth / canvas.clientHeight;
         camera.updateProjectionMatrix();
       }
-
+    // para recorrer cada objeto de la scena (tambien incluye la camara)
+    /*scene.traverse(function(object){
+        if (object.isMesh == true){ // para evitar rotar la camara
+            object.rotation.y += 0.001;
+        }
+    });*/
     sun.rotation.y += 0.0001;
     mercury.move();
     venus.move();
@@ -186,8 +263,10 @@ var animate = function(){
     mars.move();
     jupiter.move();
     saturno.move();
+    ring.position.set(saturno.mesh.position.x, 0, saturno.mesh.position.z);
+    urano.move();
+    neptuno.move();
 
-    //circle.rotation 
     renderer.render( scene, camera );
 }
 
