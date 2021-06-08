@@ -33,6 +33,7 @@ M=np.matmul(Mvp,Morth)
 Orthographic = np.matmul(M,plane)
 print('Proyeccion Ortografica: \n', Orthographic)
 
+# e = (0,2,2)
 e = np.array([0,5,2])
 g = np.array([0,-2,-5])
 t = np.array([0,1,0])
