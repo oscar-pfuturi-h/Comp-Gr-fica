@@ -1,11 +1,7 @@
-#include <glad/glad.h>
-#include <glfw/glfw3.h>
+#include "Utils.h"
 
 #include <iostream>
 #include <fstream>
-#include <string>
-
-#include "Utils.h"
 
 using namespace std;
 
