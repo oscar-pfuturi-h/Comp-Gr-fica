@@ -1,7 +1,5 @@
-#include <GL\glew.h>
-#include <GLFW\glfw3.h>
+#include "Utils.h"
 
-#include <string>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -10,7 +8,6 @@
 #include <glm\gtc\type_ptr.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
-#include "Utils.h"
 
 using namespace std;
 
@@ -94,7 +91,8 @@ int main(void) { // main() is unchanged from before
 	GLFWwindow* window = glfwCreateWindow(600, 600, "Chapter 4 - program 1", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
+	//if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
 	init(window);
 
