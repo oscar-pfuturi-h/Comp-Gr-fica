@@ -19,9 +19,9 @@ GLuint renderingProgram;
 GLuint vao[numVAOs];
 GLuint vbo[numVBOs];
 // allocate variables used in display() function, so that they won’t need to be allocated during rendering
-GLuint mvLoc, projLoc, tfLoc, vLoc;
+GLuint mvLoc, projLoc, tfLoc, vLoc, mLoc;
 int width, height, i;
-float aspect, tf, timeFactor;
+float aspect, tf;
 glm::mat4 pMat, vMat, mMat, mvMat, tMat, rMat;
 
 const GLchar* vspath = "../vertShader2.glsl";
@@ -62,7 +62,8 @@ void display(GLFWwindow* window, double currentTime) {
 	glUseProgram(renderingProgram);
 
 	// get the uniform variables for the MV and projection matrices
-	vLoc = glGetUniformLocation(renderingProgram, "v_matrix");
+	mLoc = glGetUniformLocation(renderingProgram, "m_matrix");
+	vLoc = glad_glGetUniformLocation(renderingProgram, "v_matrix");
 	projLoc = glGetUniformLocation(renderingProgram, "proj_matrix");
 	tfLoc = glGetUniformLocation(renderingProgram, "tf");
 
@@ -70,14 +71,22 @@ void display(GLFWwindow* window, double currentTime) {
 	glfwGetFramebufferSize(window, &width, &height);
 	aspect = (float)width / (float)height;
 	pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f); // 1.0472 radians = 60 degrees
-	// build view matrix, model matrix, and model-view matrix
+
 	vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, -cameraY, -cameraZ));
 
+	tf = (float)currentTime;
+	tMat = glm::translate(glm::mat4(1.0f), glm::vec3(sin(0.35f * tf) * 4.0f, cos(0.52f * tf) * 4.0f, sin(0.7f * tf) * 4.0f));
+
+	rMat = glm::rotate(glm::mat4(1.0f), 1.75f * tf, glm::vec3(0.0f, 1.0f, 0.0f));
+	rMat = glm::rotate(rMat, 1.75f * tf, glm::vec3(1.0f, 0.0f, 0.0f));
+	rMat = glm::rotate(rMat, 1.75f * tf, glm::vec3(0.0f, 0.0f, 1.0f));
+	mMat = tMat * rMat;
+
+	glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(mMat));
 	glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(vMat));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
-	timeFactor = ((float)currentTime);
-	glUniform1f(tfLoc, (float)timeFactor);
-	
+	glUniform1f(tfLoc, (float)currentTime);
+
 	// associate VBO with the corresponding vertex attribute in the vertex shader
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
