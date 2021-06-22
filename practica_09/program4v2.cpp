@@ -12,7 +12,7 @@
 using namespace std;
 
 #define numVAOs 1
-#define numVBOs 2
+#define numVBOs 3
 
 float cameraX, cameraY, cameraZ;
 float cubeLocX, cubeLocY, cubeLocZ;
@@ -63,14 +63,15 @@ void setupVertices(void) { // 36 vertices, 12 triangles, makes 2x2x2 cube placed
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubePositions), cubePositions, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubePositions), cubePositions, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidPositions), pyramidPositions, GL_STATIC_DRAW);
 }
 
 void init(GLFWwindow* window) {
 	renderingProgram = _UTILS_::createShaderProgram(vspath, fspath);
 	cameraX = 0.0f; cameraY = 0.0f; cameraZ = 8.0f;
-	cubeLocX = 0.0f; cubeLocY = -2.0f; cubeLocZ = 0.0f; // shift down Y to reveal perspective
-	pyrLocX = 2.0f; pyrLocY = 2.0f; pyrLocZ = -1.0f;
 	setupVertices();
 }
 
@@ -89,9 +90,6 @@ void display(GLFWwindow* window, double currentTime) {
 	pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f); // 1.0472 radians = 60 degrees
 	// build view matrix, model matrix, and model-view matrix
 	vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, -cameraY, -cameraZ));
-	mMat = glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
-	mvMat = vMat * mMat;
-	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvMat));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(pMat));
 
 	mvStack.push(vMat);
@@ -104,7 +102,7 @@ void display(GLFWwindow* window, double currentTime) {
 
 	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
 	// associate VBO with the corresponding vertex attribute in the vertex shader
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 	// adjust OpenGL settings and draw model
@@ -113,8 +111,7 @@ void display(GLFWwindow* window, double currentTime) {
 	glDrawArrays(GL_TRIANGLES, 0, 18);
 	mvStack.pop();
 
-	for (i = 0; i < 2; i++) {
-		tf = currentTime + i;
+		tf = currentTime;
 		//----------------------- cube == planet ---------------------------------------------
 		mvStack.push(mvStack.top());
 		mvStack.top() *=
@@ -142,8 +139,34 @@ void display(GLFWwindow* window, double currentTime) {
 		glDrawArrays(GL_TRIANGLES, 0, 36); // draw the moon
 		// remove moon scale/rotation/position, planet position, sun position, and view matrices from stack
 		mvStack.pop(); mvStack.pop(); mvStack.pop();
-	}
-	
+
+		// //////////// second planet
+		mvStack.push(mvStack.top());
+		mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)tf * 0.9) * 8, 0.0f,	cos((float)tf * 0.9) * 8)); 
+		mvStack.push(mvStack.top());
+		mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)(tf * 2.0), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		mvStack.pop();
+
+		mvStack.push(mvStack.top());
+		mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, sin((float)tf * 0.7) * 2.0, cos((float)tf * 0.7) * 2.0));
+		mvStack.push(mvStack.top());
+		mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)tf, glm::vec3(0.0, 0.0, 1.0));
+
+		mvStack.top() *= glm::scale(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.25f));
+		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		mvStack.pop(); mvStack.pop(); mvStack.pop();
 }
 
 int main(void) { // main() is unchanged from before
@@ -151,7 +174,7 @@ int main(void) { // main() is unchanged from before
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
-	GLFWwindow* window = glfwCreateWindow(600, 600, "Chapter 4 - program 1", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 800, "Chapter 4 - program 1", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { exit(EXIT_FAILURE); }
