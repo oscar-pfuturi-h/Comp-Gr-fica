@@ -111,62 +111,62 @@ void display(GLFWwindow* window, double currentTime) {
 	glDrawArrays(GL_TRIANGLES, 0, 18);
 	mvStack.pop();
 
-		tf = currentTime;
-		//----------------------- cube == planet ---------------------------------------------
-		mvStack.push(mvStack.top());
-		mvStack.top() *=
-			glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)tf) * 4.0, 0.0f, cos((float)tf) * 4.0));
-		mvStack.push(mvStack.top());
-		mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)tf, glm::vec3(0.0, 1.0, 0.0));
-		// planet rotation
-		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(0);
-		glDrawArrays(GL_TRIANGLES, 0, 36); // draw the planet
-		mvStack.pop(); // remove the planet’s axial rotation from the stack
+	tf = currentTime;
+	//----------------------- cube == planet ---------------------------------------------
+	mvStack.push(mvStack.top());
+	mvStack.top() *=
+		glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)tf) * 4.0, 0.0f, cos((float)tf) * 4.0));
+	mvStack.push(mvStack.top());
+	mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)tf, glm::vec3(0.0, 1.0, 0.0));
+	// planet rotation
+	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_TRIANGLES, 0, 36); // draw the planet
+	mvStack.pop(); // remove the planet’s axial rotation from the stack
 
-		//----------------------- smaller cube == moon -----------------------------------
-		mvStack.push(mvStack.top());
-		mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, sin((float)tf) * 2.0, cos((float)tf) * 2.0));
-		mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)tf, glm::vec3(0.0, 0.0, 1.0));
-		// moon rotation
-		mvStack.top() *= glm::scale(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.25f)); // make the moon smaller
-		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(0);
-		glDrawArrays(GL_TRIANGLES, 0, 36); // draw the moon
-		// remove moon scale/rotation/position, planet position, sun position, and view matrices from stack
-		mvStack.pop(); mvStack.pop(); mvStack.pop();
+	//----------------------- smaller cube == moon -----------------------------------
+	mvStack.push(mvStack.top());
+	mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, sin((float)tf) * 2.0, cos((float)tf) * 2.0));
+	mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)tf, glm::vec3(0.0, 0.0, 1.0));
+	// moon rotation
+	mvStack.top() *= glm::scale(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.25f)); // make the moon smaller
+	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_TRIANGLES, 0, 36); // draw the moon
+	// remove moon scale/rotation/position, planet position, sun position, and view matrices from stack
+	mvStack.pop(); mvStack.pop(); mvStack.pop();
 
-		// //////////// second planet
-		mvStack.push(mvStack.top());
-		mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)tf * 0.9) * 8, 0.0f,	cos((float)tf * 0.9) * 8)); 
-		mvStack.push(mvStack.top());
-		mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)(tf * 2.0), glm::vec3(0.0f, 1.0f, 0.0f));
+	// //////////// second planet
+	mvStack.push(mvStack.top());
+	mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)tf * 0.9) * 8, 0.0f,	cos((float)tf * 0.9) * 8)); 
+	mvStack.push(mvStack.top());
+	mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)(tf * 2.0), glm::vec3(0.0f, 1.0f, 0.0f));
 
-		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(0);
+	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		mvStack.pop();
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	mvStack.pop();
 
-		mvStack.push(mvStack.top());
-		mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, sin((float)tf * 0.7) * 2.0, cos((float)tf * 0.7) * 2.0));
-		mvStack.push(mvStack.top());
-		mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)tf, glm::vec3(0.0, 0.0, 1.0));
+	mvStack.push(mvStack.top());
+	mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, sin((float)tf * 0.7) * 2.0, cos((float)tf * 0.7) * 2.0));
+	mvStack.push(mvStack.top());
+	mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float)tf, glm::vec3(0.0, 0.0, 1.0));
 
-		mvStack.top() *= glm::scale(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.25f));
-		glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(0);
+	mvStack.top() *= glm::scale(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.25f));
+	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		mvStack.pop(); mvStack.pop(); mvStack.pop();
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	mvStack.pop(); mvStack.pop(); mvStack.pop();
 }
 
 int main(void) { // main() is unchanged from before
