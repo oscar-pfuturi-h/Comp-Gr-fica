@@ -1,0 +1,3 @@
+﻿  exercise.cpp
+C:\Users\oscar.pf.h\Documents\CGrafica\outputgl\opengl-test\exercise.cpp(117,20): warning C4244:  '=': conversión de 'double' a 'float'; posible pérdida de datos
+  opengl-test.vcxproj -> C:\Users\oscar.pf.h\Documents\CGrafica\outputgl\opengl-test\x64\Debug\opengl-test.exe
