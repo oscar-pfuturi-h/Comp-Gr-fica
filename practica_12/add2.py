@@ -17,15 +17,15 @@ b=0
 
 for x in range(rows):
     for y in range(cols):
-        r=(plaza.item(x,y,2)+leon.item(x,y,2))/2
-        g=(plaza.item(x,y,1)+leon.item(x,y,1))/2
-        b=(plaza.item(x,y,0)+leon.item(x,y,0))/2
+        r=int(plaza.item(x,y,2)/2)+int(leon.item(x,y,2)/2)
+        g=int(plaza.item(x,y,1)/2)+int(leon.item(x,y,1)/2)
+        b=int(plaza.item(x,y,0)/2)+int(leon.item(x,y,0)/2)
         plaza.itemset((x,y,2),r)
         plaza.itemset((x,y,1),g)
         plaza.itemset((x,y,0),b)
 
 
-hist = cv.calcHist([plaza],[0],None,[256],[0,256])
-plt.subplot(1,2,1),plt.imshow(cv.cvtColor(plaza, cv.COLOR_BGR2RGB))
-plt.subplot(1,2,2).hist(plaza.ravel(),256,[0,256])
+#hist = cv.calcHist([plaza],[0],None,[256],[0,256])
+plt.subplot(1,1,1),plt.imshow(cv.cvtColor(plaza, cv.COLOR_BGR2RGB))
+#plt.subplot(1,2,2).hist(plaza.ravel(),256,[0,256])
 plt.show()
