@@ -14,12 +14,16 @@ rows,cols,tres=plaza.shape
 r=0
 g=0
 b=0
+c=0
 
 for x in range(rows):
     for y in range(cols):
-        r=int(plaza.item(x,y,2)/2)+int(leon.item(x,y,2)/2)
-        g=int(plaza.item(x,y,1)/2)+int(leon.item(x,y,1)/2)
-        b=int(plaza.item(x,y,0)/2)+int(leon.item(x,y,0)/2)
+        r=int(plaza.item(x,y,2)/2)+int(leon.item(x,y,2)/2)+c
+        g=int(plaza.item(x,y,1)/2)+int(leon.item(x,y,1)/2)+c
+        b=int(plaza.item(x,y,0)/2)+int(leon.item(x,y,0)/2)+c
+        if r>255: r=255
+        if g>255: g=255
+        if b>255: b=255
         plaza.itemset((x,y,2),r)
         plaza.itemset((x,y,1),g)
         plaza.itemset((x,y,0),b)
