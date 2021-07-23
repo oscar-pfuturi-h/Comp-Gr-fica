@@ -28,9 +28,12 @@ print(marks.shape,photographer.shape)
 
 rows2,cols2=marks.shape
 
+c=0
+
 for x in range(rows2):
     for y in range(cols2):
-        add=int(marks.item(x,y)/2)+int(photographer.item(x,y)/2)
+        add=int(marks.item(x,y)/2)+int(photographer.item(x,y)/2)+c
+        if add>255: add=255
         addition.itemset((x,y),int(add))
 
 #hist = cv.calcHist([marks],[0],None,[256],[0,256])
